@@ -1,0 +1,603 @@
+\section{Stability}
+\label{section-stability}
+
+With the necessary foundations all in place, we can now prove the stability theorem. For the persistence diagram of a data set to be a useful invariant, we would hope that small changes in the data lead to small changes in the persistence diagram. The stability theorem shows that this is the case, once we have pinned down the correct definitions for a `small change' in data and a `small change' in persistence diagram.
+
+\begin{theorem}[Stability]
+Let $f, g : X \to \R$ be functions on a topological space $X$ and let $\U = H(X^f), \V = H(X^g)$ be the sublevel persistence modules. If $\U$ and $\V$ are q-tame, then:
+\begin{align*}
+d_b(\dgm(\U), \dgm(\V)) \leq \Vert f - g \Vert_\infty
+\end{align*}
+where $d_b$ denotes the `bottleneck distance' between two diagrams, yet to be defined, and $\Vert \cdot \Vert_\infty$ denotes the supremum norm.
+\end{theorem}
+
+In this section we will prove the stability theorem after first proving two preliminary results: the box lemma and interpolation lemma.
+
+The stability theorem was first proven in a much more restricted setting by Cohen-Steiner, Edelsbrunner and Harer \cite{cohen2007stability}. They required that $X$ be a triangulable space and that $f$ and $g$ be `tame' functions, i.e., functions with only finitely many homological critical values. Such restrictions are lifted here, following arguments by Chazal et al. \cite{chazal2009proximity} that were later simplified by the same authors \cite{chazal2012structure}.
+
+\subsection{Interleaving distance}
+
+Our first step is to translate the distance $\Vert f - g \Vert_\infty$ into an algebraic statement about persistence modules. Let us suppose $\Vert f - g \Vert_\infty < \delta$. Then for any $x \in X$ we have $f(x) < g(x) + \delta$ and $g(x) < f(x) + \delta$, which implies the following inclusion of sublevel sets:
+\begin{align*}
+f^{-1}((-\infty, a]) &\subseteq g^{-1}((-\infty, a+\delta]) \subseteq f^{-1}((-\infty, a+2\delta])\\
+g^{-1}((-\infty, a]) &\subseteq f^{-1}((-\infty, a+\delta]) \subseteq g^{-1}((-\infty, a+2\delta]).
+\end{align*}
+These induce maps $U_a \to V_{a+\delta} \to U_{a + 2\delta}$ and $V_a \to U_{a+\delta} \to V_{a + 2\delta}$ for all $a \in \R$. What we have is \emph{almost} an isomorphism of persistence modules, but where the maps in each direction shift the index by $\delta$.
+
+\begin{definition}
+A \emph{homomorphism of degree $\delta$} from $\U$ to $\V$ is a collection of maps $\phi_t : U_t \to V_{t+\delta}$ such that:
+\begin{displaymath}
+\xymatrix{
+U_s \ar[d]_{\phi_s} \ar[r]^{u_s^t} & U_t \ar[d]^{\phi_t}\\
+V_{s+\delta} \ar[r]^{v_{s+\delta}^{t+\delta}} & V_{t+\delta}
+}
+\end{displaymath}
+commutes for all $s \leq t$. We write $\Hom^\delta(\U, \V)$ for the collection of all such homomorphisms.
+\end{definition}
+
+As an example, the ordinary structure maps $v_t^{t+\delta}$ form a homomorphism of degree $\delta$. We write this homomorphism as $1_\V^\delta$.
+
+When we have two mutually `inverse' shift maps as above, we say that $\U$ and $\V$ are $\delta$-interleaved. More precisely:
+
+\begin{definition}
+Two persistence modules $\U$ and $\V$ are \emph{$\delta$-interleaved} if there are maps $\Phi \in \Hom^\delta(\U, \V)$ and $\Psi \in \Hom^\delta(\V, \U)$ such that
+\begin{align*}
+\Psi \Phi = 1_\U^{2\delta}, \quad \Phi \Psi = 1_\V^{2\delta}
+\end{align*}
+Expanding the maps involved, these equations state that for every $t \in \R$, the following two diagrams commute:
+\begin{align*}
+\xymatrix@=1em{
+U_t \ar[dr] \ar[rr] & & U_{t+2\delta} \\
+& V_{t+\delta} \ar[ur]
+}
+\text{\raisebox{-15pt}{, }}
+\quad
+\xymatrix@=1em{
+& U_{t+\delta} \ar[dr] \\
+V_t \ar[ur] \ar[rr] & & V_{t+2\delta}
+}
+\end{align*}
+\end{definition}
+
+Note that a $0$-interleaving is precisely an isomorphism.
+
+If two modules $\U$ and $\V$ are $\delta$-interleaved, they are certainly $(\delta + \epsilon)$-interleaved for any $\epsilon > 0$. We can construct the required maps easily:
+\begin{align*}
+\Phi' &= \Phi 1_\U^\epsilon \\
+\Psi' &= \Psi 1_\V^\epsilon.
+\end{align*}
+Then
+\begin{align*}
+\Phi' \Psi' = \Phi 1_\U^\epsilon \Psi 1_\V^\epsilon = 1_\V^\epsilon \Phi \Psi 1_\V^\epsilon = 1_\V^\epsilon 1_\V^{2\delta} 1_\V^\epsilon = 1_\V^{2(\delta + \epsilon)}
+\end{align*}
+with the $\Psi' \Phi'$ direction identical.
+
+This suggests that we can measure the distance between two persistence modules by finding the smallest $\delta$ for which the modules are $\delta$-interleaved.
+
+\begin{definition}
+\label{def-interleaving-distance}
+The \emph{interleaving distance} between two persistence modules is:
+\begin{align*}
+d_i(\U, \V) &= \inf \{ \delta \st \U, \V \text{ are } \delta\text{-interleaved} \}.
+\end{align*}
+\end{definition}
+
+In the case of sublevel persistence modules, we have the inequality
+\begin{align*}
+d_i(\U, \V) \leq \Vert f - g \Vert_\infty
+\end{align*}
+by the discussion above.
+
+The $\inf$ in this definition is not necessarily attained. For example, the two interval modules $\I[p, q)$ and $\I[p, q]$ have interleaving distance 0, but the two modules are clearly not isomorphic.
+
+\begin{proposition}
+The interleaving distance satisfies the triangle inequality:
+\begin{align*}
+d_i(\U, \W) \leq d_i(\U, \V) + d_i(\V, \W)
+\end{align*}
+for any three persistence modules $\U, \V, \W$.
+\end{proposition}
+\begin{proof}
+Let $(\Phi_1$, $\Psi_1)$ be a $\delta_1$-interleaving between $\U$ and $\V$, and $(\Phi_2$, $\Psi_2)$ a $\delta_2$-interleaving between $\V$ and $\W$. The compositions $\Phi = \Phi_2 \Phi_1$ and $\Psi = \Psi_1 \Psi_2$ yield a $\delta = (\delta_1 + \delta_2)$-interleaving between $\U$ and $\W$. To confirm this is a valid interleaving, we calculate:
+\begin{align*}
+\Psi \Phi = \Psi_1 \Psi_2 \Phi_2 \Phi_1 = \Psi_1 1_\V^{2\delta_2} \Phi_1 = \Psi_1 \Phi_1 1_\U^{2\delta_2} = 1_\U^{2\delta_1} 1_\U^{2\delta_2} = 1_\U^{2\delta} \\
+\Phi \Psi = \Phi_2 \Phi_1 \Psi_1 \Psi_2  = \Phi_2 1_\V^{2\delta_1} \Psi_2 = \Phi_2 \Psi_2 1_\W^{2\delta_1} = 1_\W^{2\delta_2} 1_\W^{2\delta_1} = 1_\W^{2\delta}.
+\end{align*} 
+
+Now, taking the infimum over $\delta_1$ and $\delta_2$ we have our result.
+\end{proof}
+
+\subsection{Bottleneck distance}
+
+We now define the distance on the other side of the stability theorem, the `bottleneck distance'. The intuition here is that two diagrams are close if we can match the points of the two diagrams such that the distance between paired points is small. There is some subtlety when we have points close to the diagonal $\Delta$. We allow such points to be `matched' to the diagonal so that the appearance of small features does not prevent a matching of the remaining points.
+
+Again we work in the open half plane given by:
+\begin{align*}
+\mathcal{H} = \{(p, q) \st p < q \}.
+\end{align*}
+
+The distance between points is calculated using the $\ell^\infty$-metric. In $\R^2$, this distance is
+\begin{align*}
+d^\infty((p, q), (r, s)) = \max(|p - r|, |q - s|)
+\end{align*}
+for two points and
+\begin{align*}
+d^\infty((p, q), \Delta) = \tfrac{1}{2} (q - p)
+\end{align*}
+for a point and the diagonal. This use of $\ell^\infty$ is not arbitrary, as the following propositions show.
+
+\begin{proposition}
+Let $\U = \I(p^*, q^*)$ and $\U = \I(r^*, s^*)$ be interval modules. Then:
+\begin{align*}
+d_i(\U, \V) \leq d^\infty((p, q), (r, s))
+\end{align*}
+\end{proposition}
+\begin{proof}
+We must show that for any $\delta > d^\infty((p, q), (r, s))$, the modules $\U$ and $\V$ are $\delta$-interleaved. There is an obvious candidate interleaving: set the interleaving maps to $1$ when both the domain and codomain are $\mathbf{k}$ and $0$ otherwise.
+
+First we show that this definition gives us valid module homomorphisms of degree $\delta$. This is equivalent to verifying that the diagram
+\begin{displaymath}
+\xymatrix{
+U_t \ar[d] \ar[r] & U_{t'} \ar[d]\\
+V_{t+\delta} \ar[r] & V_{t'+\delta}
+}
+\end{displaymath}
+commutes. Because the spaces and maps are all either $1$ or $0$, the only possible obstruction is some diagram of the form:
+\begin{align*}
+\xymatrix{
+\bullet \ar[d] \ar[r] & \bullet \ar[d]\\
+\circ \ar[r] & \bullet
+}
+\quad
+\text{\raisebox{-15pt}{ or }}
+\quad
+\xymatrix{
+\bullet \ar[d] \ar[r] & \circ \ar[d]\\
+\bullet \ar[r] & \bullet
+}
+\end{align*}
+In the first case, we must have $p^* < t$ and $t + \delta < r^*$, but $\delta > r-p$ so this is impossible. In the second case, we have $q^* < t'$ and $t' + \delta < s^*$, but $\delta > s-q$. Therefore, $\Phi : \U \to \V$ is a module homomorphism of degree $\delta$. By symmetry, $\Psi : \V \to \U$ is also a valid homomorphism.
+
+Finally, we must show that $\Phi$ and $\Psi$ satisfy $\Psi \Phi = 1_\U^{2\delta}$ and $\Phi \Psi = 1_\V^{2\delta}$. For the first identity, we have the following diagram.
+\begin{align*}
+\xymatrix@=1em{
+U_t \ar[dr] \ar[rr] & & U_{t+2\delta} \\
+& V_{t+\delta} \ar[ur]
+}
+\end{align*}
+This can only fail to commute in the following case:
+\begin{align*}
+\xymatrix{
+\bullet \ar[dr] \ar[rr] & & \bullet \\
+& \circ \ar[ur]
+}
+\end{align*}
+The top row implies that $p^* < t < t+2\delta < q^*$. Because $\delta > r-p$ and $\delta > q - s$, we have:
+\begin{align*}
+r^* < (p+\delta)^* < t+\delta < (q-\delta)^* < s^*.
+\end{align*}
+Therefore $t+\delta$ lies in the interval $(r^*, s^*)$ and the above situation is impossible.
+
+The other identity follows by symmetry. We conclude that $\U$ and $\V$ are interleaved for all $\delta > d^\infty((p, q), (r, s))$, and therefore $d_i(\U, \V) \leq d^\infty((p, q), (r, s))$.
+\end{proof}
+
+\begin{proposition}
+Let $\U = \I(p^*, q^*)$ be an interval module, and $0$ denote the zero persistence module. Then:
+\begin{align*}
+d_i(\U, 0) = d^\infty((p, q), \Delta).
+\end{align*}
+\end{proposition}
+\begin{proof}
+Because one of the modules is the zero module, all interleaving maps must be the zero map. The only condition that could fail is $\Psi \Phi = 1_\U^{2\delta}$, i.e., $0 = 1_\U^{2\delta}$. This holds when $\delta > \tfrac{1}{2}(q-p)$ and fails when $\delta < \tfrac{1}{2}(q-p)$.
+\end{proof}
+
+As we can match points to the diagonal, we weaken our notion of bijection to the following.
+
+\begin{definition}
+A \emph{partial matching} between two multisets $\mathsf{A}$ and $\B$ is a subset $\mathsf{M}$ of $\mathsf{A} \times \B$ such that:
+\begin{itemize}
+\item for every $\alpha \in \mathsf{A}$ there is at most one $\beta \in \B$ such that $(\alpha, \beta) \in \mathsf{M}$; and,
+\item for every $\beta \in \B$ there is at most one $\alpha \in \mathsf{A}$ such that $(\alpha, \beta) \in \mathsf{M}$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}
+A partial matching is a \emph{$\delta$-matching} when:
+\begin{itemize}
+\item for every $(\alpha, \beta) \in \mathsf{M}$, $d^\infty(\alpha, \beta) \leq \delta$;
+\item if $\alpha \in \mathsf{A}$ is unmatched then $d^\infty(\alpha, \Delta) \leq \delta$;
+\item if $\beta \in \B$ is unmatched then $d^\infty(\beta, \Delta) \leq \delta$.
+\end{itemize}
+\end{definition}
+
+We now define the bottleneck distance in a similar manner to the interleaving distance.
+
+\begin{definition}
+The \emph{bottleneck distance} between two multisets in $\mathcal{H}$ is:
+\begin{align*}
+d_b(\mathsf{A}, \B) = \inf \{ \delta \st \text{there exists a $\delta$-matching between $\mathsf{A}$ and $\B$}\}.
+\end{align*}
+\end{definition}
+
+\begin{proposition}
+The interleaving distance satisfies the triangle inequality
+\begin{align*}
+d_b(\A, \mathsf{C}) \leq d_b(\A, \B) + d_b(\B, \mathsf{C})
+\end{align*}
+for any three multisets $\A, \B, \mathsf{C}$.
+\end{proposition}
+\begin{proof}
+Let $\M_1$ be a $\delta_1$-matching between $\A$ and $\B$, and $\M_2$ a $\delta_2$ matching between $\B$ and $\mathsf{C}$. We define a $\delta = (\delta_1 + \delta_2)$-matching between $\A$ and $\mathsf{C}$ by:
+\begin{align*}
+\M = \{ (a, \gamma) \st \text{there exists } \beta \in \B \text{ such that } (\alpha, \beta) \in \M_1, (\beta, \gamma) \in \M_2\}.
+\end{align*}
+
+If $(\alpha, \gamma) \in \M$, then there is a $\beta$ linking $\alpha$ and $\gamma$, so $d^\infty(\alpha, \gamma) \leq d^\infty(\alpha, \beta) + d^\infty(\beta, \gamma) \leq \delta_1 + \delta_2 = \delta$.
+
+If $\alpha$ is unmatched in $\M$, there are two possibilities. If $\alpha$ is unmatched in $\M_1$ then $d^\infty(\alpha, \Delta) \leq \delta_1 \leq \delta$. If $\alpha$ is matched with $\beta$ in $\M_1$ then $\beta$ must be unmatched in $\M_2$, in which case:
+\begin{align*}
+d^\infty(\alpha, \Delta) \leq d^\infty(\alpha, \beta) + \delta^\infty(\beta, \Delta) \leq \delta_1 + \delta_2 = \delta.
+\end{align*}
+
+The same argument shows that if $\gamma$ is unmatched in $\M$ then $d^\infty(\gamma, \Delta) \leq \delta$. Therefore $\M$ is a valid matching. The proposition follows by taking the infimum over all matchings $\M_1$ and $\M_2$.
+\end{proof}
+
+When we work in the realm of q-tame persistence modules, we can show that the $\inf$ is attained. 
+
+\begin{theorem}
+\label{thm-bottleneck-inf-attained}
+Let $\mathsf{A}$ and $\B$ be locally finite multisets in $\mathcal{H}$. If for every $\eta > \delta$ there exists an $\eta$-matching between $\A$ and $\B$ then there exists a $\delta$-matching.
+\end{theorem}
+\begin{proof}
+Let $\M_n$ be a $(\delta + \tfrac{1}{n})$-matching for all $n \geq 1$. We will construct a $\delta$-matching $\M$ as the `limit' of this sequence. Let $\chi, \chi_n : \A \times \B \to \{0, 1\}$ denote the indicator functions of $\M$ and $\M_n$.
+
+We construct $\chi$ as follows. Because $\A$ and $\B$ are locally finite, they must be countable. Fix an enumeration $(a_\ell, b_\ell)$ of $\A \times \B$. We inductively define a descending sequence:
+\begin{align*}
+\N = \N_0 \supseteq \N_1 \supseteq \dots \supseteq \N_\ell \supseteq \dots
+\end{align*}
+such that $\chi_n(a_\ell, b_\ell)$ has the same value for all $n \in \N_\ell$. The descending nature of the sequence means that $\chi_n(a_\ell, b_\ell)$ also agrees for all $\chi_n$ in $\N_{\ell'}$ with $\ell' > \ell$. We can then define $\chi(a_\ell, b_\ell)$ to be this common value.
+
+Given $\N_{\ell-1}$, consider the two sets
+\begin{align*}
+\{n \in \N_{\ell-1} \st \chi_n(a_\ell, b_\ell) = 0\} \text{ and } \{n \in \N_{\ell-1} \st \chi_n(a_\ell, b_\ell) = 1\}.
+\end{align*}
+At least one of these sets infinite, and we define $\N_\ell$ to be one such infinite set. This construction guarantees that we never run out of `choices' for the next set of $\chi_n$.
+
+We now must prove that this $\chi$ is a valid $\delta$-matching between $\A$ and $\B$. First, note that for any finite subset $F \in \A \times \B$, there exists an $\chi_N$ beyond which $\chi$ agrees with $\chi_n$ on $F$ for all $n \geq N$. Indeed, choose $N$ to be the largest index $\ell$ of all pairs in $F$. By the definition of $\chi$, the claim holds.
+
+We can now check the conditions for a $\delta$-matching.
+\begin{itemize}
+\item For $a \in \A$, there is at most one $b \in \B$ with $\chi(a, b) = 1$.
+\begin{proof}
+Suppose $a$ is matched with both $b$ and $b'$. By the claim above, there must be an $n$ such that $\chi_n(a, b) = \chi_n(a, b') = 1$, which contradicts the fact that $\chi_n$ is a valid partial matching.
+\end{proof}
+\item For $b \in \B$, there is at most one $a \in \A$ with $\chi(a, b) = 1$.
+\begin{proof}
+Follows symmetrically.
+\end{proof}
+\item For $a \in \A$, if $d^\infty(a, \Delta) > \delta$, there is a $b \in \B$ with $\chi(a, b) = 1$.
+\begin{proof}
+Choose $N$ such that $d^\infty(a, \Delta) > \delta + \tfrac{1}{N}$. The set:
+\begin{align*}
+F = \{b \in \B \st d^\infty(a, b) \leq \delta + \tfrac{1}{N} \}
+\end{align*}
+is finite, as $\B$ is locally finite and this set lies away from the diagonal. By the claim above, there an $\ell$ for which $\chi(a, b) = \chi_n(a, b)$ for all $b \in F$ and $n \in \N_\ell$. Also, if $n \geq N$ then $\chi_n(a, b) = 1$ for some $b \in F$, as $\M_n$ is a $(\delta + \tfrac{1}{n})$-matching. Therefore $\chi(a, b) = \chi_n(a, b) = 1$ for some $b \in \B$.
+\end{proof}
+\item For $b \in \B$, if $d^\infty(b, \Delta) > \delta$, there is a $a \in \A$ with $\chi(a, b) = 1$.
+\begin{proof}
+Follows symmetrically.
+\end{proof}
+\item If $\chi(a, b) = 1$, then $d^\infty(a, b) \leq \delta$.
+\begin{proof}
+There exist infinitely many $n \in \N$ such that $\chi_n(a, b) = 1$. For all such $n$, the equation $d^\infty(a, b) \leq \delta + \tfrac{1}{n}$ holds. Because $n$ becomes arbitrarily large, the result follows.
+\end{proof}
+\end{itemize}
+
+This completes the proof of the theorem.
+\end{proof}
+
+\subsection{Interpolation lemma}
+
+The first main ingredient of the stability theorem is the interpolation lemma, which proves that for any interleaved pair of persistence modules, there is a 1-parameter family of modules that interpolates between them. We begin by giving an alternative characterisation of an interleaving between two modules.
+
+The plane $\R^2$ has a partial order on it defined by 
+\begin{align*}
+(p_1, q_1) \leq (p_2, q_2) \text{ whenever } p_1 \leq p_2 \text{ and } q_1 \leq q_2
+\end{align*}
+For any real number $x$, we define shifted diagonal $\Delta_x$ to be:
+\begin{align*}
+\Delta_x = \{ (p, q) \st q-p=2x \} \subset \R^2.
+\end{align*}
+Any persistence modules over $\R$ can be then considered as a persistence module over $\Delta_x$, by identifying each $t \in \R$ with the point $(t-x, t+x) \in \Delta_x$. 
+
+\begin{proposition}
+Two persistence modules $\U$, $\V$ are $|y-x|$-interleaved if and only if there is a persistence module $\W$ over $\Delta_x \cup \Delta_y$ such that $\W_{\Delta_x} = \U$ and $\W_{\Delta_y} = \V$.
+\end{proposition}
+\begin{proof}
+Let $\delta = |y-x|$, and let us assume $x < y$. In addition to the maps within each of $\Delta_x$ and $\Delta_y$, we also have maps between the two lines. Let $\Phi = \{\phi_t\}$ be the vertical maps from $\Delta_x$ to $\Delta_y$ and $\Psi = \{\psi_t\}$ the horizontal maps from $\Delta_y$ to $\Delta_x$. Then $\phi_t$ and $\psi_t$ are maps:
+\begin{align*}
+\phi_t : U_t = W_{t-x, t+x} &\to W_{t-x, t+2y-x} = V_{t+\delta}\\
+\psi_t : V_t = W_{t-y, t+y} &\to W_{t+y-2x, t+y} = U_{t+\delta}.
+\end{align*}
+The composition law for $\W$ implies that $\Psi\Phi=1_\U^{2\delta}$ and $\Phi\Psi=1_\V^{2\delta}$ as required.
+
+The module $\W$ does not contain more information than the interleaving, as any map $w_S^T$ can be factored into the form:
+\begin{align*}
+w_S^T &= u_s^t &&\text{ if } S, T \in \Delta_x \\
+w_S^T &= v_s^t &&\text{ if } S, T \in \Delta_y \\
+w_S^T &= v_{s+\delta}^t \phi_s &&\text{ if } S \in \Delta_x \text{ and } T \in \Delta_y \\
+w_S^T &= u_{s+\delta}^t \psi_s &&\text{ if } S \in \Delta_y \text{ and } T \in \Delta_x.
+\end{align*}
+\end{proof}
+
+\begin{lemma}[Interpolation lemma]
+Let $\U$ and $\V$ be $\delta$-interleaved modules. Then there exists a family of persistence modules $\{\U_x \st x \in [0, \delta]\}$ such that $\U_0 = \U$, $\U_\delta = \V$ and $\U_x$, $\U_y$ are $|y-x|$ interleaved for all $x, y \in [0, \delta]$.
+\end{lemma}
+\begin{proof}
+In view of the previous proposition, this is equivalent to showing that there exists a persistence module $\overline\W$ over the strip $\Delta_{[0, \delta]}$ where $\overline\W|_{\Delta_0} = \U$ and $\overline\W|_{\Delta_\delta} = \V$. Then, any restriction to $\Delta_x \cup \Delta_y$ provides the required interleavings for $x,y \in [0, \delta]$.
+
+To simplify the proof, we begin by scaling and translating the plane so that the interval $[0, \delta]$ is replaced with $[-1, 1]$. The $\delta$-interleaving between $\U$ and $\V$ gives us a persistence module $\W$ over $\Delta_{-1} \cup \Delta_1$.
+
+We wish to construct two persistence modules over the strip $\Delta_{[-1, 1]}$ and a map $\Omega$ between them. The persistence module $\overline\W$ will be the image of this map.
+
+We first construct four persistence modules over all of $\mathbf{R}^2$ as follows.
+\begin{align*}
+\mathbb{A} &= \U[p-1] &\text{ given by } A_{(p, q)} &= U_{p-1} &\text{ and } a_{(p, q)}^{(r, s)} &= u_{p-1}^{r-1} \\
+\mathbb{B} &= \V[q-1] &\text{ given by } B_{(p, q)} &= V_{q-1} &\text{ and } b_{(p, q)}^{(r, s)} &= v_{q-1}^{s-1} \\
+\mathbb{C} &= \U[q+1] &\text{ given by } C_{(p, q)} &= U_{p+1} &\text{ and } c_{(p, q)}^{(r, s)} &= u_{q+1}^{s+1} \\
+\mathbb{D} &= \V[p+1] &\text{ given by } D_{(p, q)} &= V_{q+1} &\text{ and } d_{(p, q)}^{(r, s)} &= v_{p+1}^{r+1}
+\end{align*}
+
+We now define four module maps by abuse of notation:
+\begin{align*}
+1_\U : \mathbb{A} &\to \mathbb{C} &\text{ defined at } &(p, q) \text{ to be } &u_{p-1}^{q+1} : U_{p-1} &\to U_{q+1}\\
+\Phi : \mathbb{A} &\to \mathbb{D} &\text{ defined at } &(p, q) \text{ to be } 
+&\phi_{p-1} : U_{p-1} &\to V_{p+1}\\
+\Psi : \mathbb{B} &\to \mathbb{C} &\text{ defined at } &(p, q) \text{ to be } &\psi_{q-1} : V_{q-1} &\to U_{q+1}\\
+1_\V : \mathbb{B} &\to \mathbb{D} &\text{ defined at } &(p, q) \text{ to be } &v_{q-1}^{p+1} : V_{q-1} &\to V_{p+1}.
+\end{align*}
+
+The maps $\Phi$ and $\Psi$ are the interleaving maps and are defined on all of $\mathbf{R}^2$. The map $1_\U$ is defined whenever $p-1 \leq q+1$, and $1_\V$ is defined when $q-1 \leq p+1$. It follows that all four are maps are defined when $-2 \leq q - p \leq 2$. This is precisely the region $\Delta_{[-1, 1]}$.
+
+Now let $\Omega \in \Hom(\mathbb{A} \oplus \mathbb{B}, \mathbb{C} \oplus \mathbb{D})$ be the map given by the following matrix:
+\begin{align*}
+\Omega = \begin{pmatrix}
+1_\U & \Psi \\
+\Phi & 1_\V
+\end{pmatrix}.
+\end{align*}
+
+We claim that $\overline\W = \im(\Omega)$ is the persistence module over $\Delta_{[-1, 1]}$ that we require. The only thing to verify is that $\U \cong \overline\W|_{\Delta_{-1}}$ and $\V \cong \overline\W|_{\Delta_1}$.
+
+On $\Delta_{-1} = \{(t+1, t-1)\}$ we have:
+\begin{align*}
+(\mathbb{A} \oplus \mathbb{B})_t &= U_t \oplus V_{t-2} \\
+(\mathbb{C} \oplus \mathbb{D})_t &= U_t \oplus V_{t+2}
+\end{align*}
+and
+\begin{align*}
+\omega_t = \begin{pmatrix}
+u_t^t & \psi_{t-2} \\
+\phi_t & v_{t-2}^{t+2}
+\end{pmatrix}.
+\end{align*}
+
+Note that the map $v_{t-2}^{t+2}$ can be factorized using the interleaving maps as $\phi_t \psi_{t-2}$. We then have:
+\begin{align*}
+\omega_t = \begin{pmatrix}
+1 & \psi_{t-2} \\
+\phi_t & v_{t-2}^{t+2}
+\end{pmatrix}
+= \begin{pmatrix}
+1 & \psi_{t-2} \\
+\phi_t & \phi_t \psi_{t-2}
+\end{pmatrix}
+= \begin{pmatrix}
+1 \\ \phi_t
+\end{pmatrix} 
+\begin{pmatrix}
+1 & \psi_{t-2}
+\end{pmatrix},
+\end{align*}
+which, when written as a diagram of modules, takse the form
+\begin{align*}
+\U \oplus \V[t-2] \overset{\Omega_1}{\longrightarrow} \U \overset{\Omega_2}{\longrightarrow} \U \oplus \V[t+2],
+\end{align*}
+where
+\begin{align*}
+\Omega_1(U_t \oplus V_t) = U_t + \Psi(V_t) \quad \text{ and } \quad \Omega_2(U_t) = U_t \oplus \Phi(U_t).
+\end{align*}
+
+Note that $\Omega_1$ is surjective and $\Omega_2$ is injective for every $t$. Therefore $\U \cong \im(\Omega|_{\Delta_{-1}})$.
+
+The argument for $\V \cong \overline\W|_{\Delta_1}$ is almost identical. On $\Delta_{-1} = \{(t-1, t+1)\}$ the modules are
+\begin{align*}
+(\mathbb{A} \oplus \mathbb{B})_t &= U_{t-2} \oplus V_t \\
+(\mathbb{C} \oplus \mathbb{D})_t &= U_{t+2} \oplus V_t
+\end{align*}
+and $\Omega$ is
+\begin{align*}
+\omega_t = \begin{pmatrix}
+u_{t-2}^{t+2} & \psi_t \\
+\phi_{t-2} & v_t^t
+\end{pmatrix}
+= \begin{pmatrix}
+\psi_t \phi_{t-2} & \psi_t \\
+\phi_{t-2} & 1
+\end{pmatrix}
+= \begin{pmatrix}
+\psi_t \\ 1
+\end{pmatrix} 
+\begin{pmatrix}
+\phi_{t-2} & 1
+\end{pmatrix}
+\end{align*}
+
+This is equivalent to 
+\begin{align*}
+\U[t-2] \oplus \V \overset{\Omega_3}{\longrightarrow} \V \overset{\Omega_4}{\longrightarrow} \U[t+2] \oplus \V
+\end{align*}
+where
+\begin{align*}
+\Omega_3(U_t \oplus V_t) = \Phi(U_t) + V_t \quad \text{ and } \quad \Omega_4(V_t) = \Phi(V_t) \oplus V_t
+\end{align*}
+
+Again we have $\Omega_3$ surjective and $\Omega_4$ injective, so $\V \cong \im(\Omega|_{\Delta_{1}})$.
+\end{proof}
+
+\subsection{Box lemma}
+
+The second ingredient of the stability theorem is the box lemma, which allows us to relate the persistence diagrams of two interleaved persistence modules locally.
+
+Let $R = [a, b] \times [c, d]$ be a rectangle in $\R^2$. The \emph{$\delta$-thickening} of $R$, written $R^\delta$, is the rectangle:
+\begin{align*}
+  R^\delta = [a - \delta, b + \delta] \times [c - \delta, d + \delta].
+\end{align*}
+
+We will also refer to the thickening of a single point. If $\alpha = (p, q)$, then:
+\begin{align*}
+  \alpha^\delta = [p - \delta, p + \delta] \times [q - \delta, q + \delta].
+\end{align*}
+
+\begin{lemma}[Box lemma]
+Let $\U$, $\V$ be $\delta$-interleaved persistence modules. Let $R$ be a rectangle. Then $\mu_\U(R) \leq \mu_\V(R^\delta)$ and $\mu_\V(R) \leq \mu_\U(R^\delta)$.
+\end{lemma}
+\begin{proof}
+Let $R = [a, b] \times [c, d]$ and $R^\delta = [A, B] \times [C, D]$. We have the following persistence modules:
+\begin{align*}
+  \U_{a,b,c,d} : U_a \to U_b \to U_c \to U_d
+\end{align*}
+and
+\begin{align*}
+  \U_{A,B,C,D} : V_A \to V_B \to V_C \to V_D
+\end{align*}
+by restricting to the appropriate finite sets. The interleaving maps allow us to combine these persistence modules:
+\begin{align*}
+  \W : V_A \overset{\Psi_A}{\longrightarrow} U_a \longrightarrow U_b \overset{\Phi_b}{\longrightarrow} V_B \longrightarrow V_C \overset{\Psi_C}{\longrightarrow} U_c \longrightarrow U_d \overset{\Phi_d}{\longrightarrow} V_D
+\end{align*}
+where $\Phi : \U \to \V$ and $\Psi : \V \to \U$ are the interleaving maps. We now calculate:
+\begin{align*}
+\mu_\V(R^\delta) &= \langle \Qoff{A} \qem \qno \qem \qno \qem \Qon{B} \qem \Qon{C} \qem \qno \qem \qno \qem \Qoff{D} \st \V \rangle \\
+&= \langle \Qoff{A} \qem \qno \qem \qno \qem \Qon{B} \qem \Qon{C} \qem \qno \qem \qno \qem \Qoff{D} \st \W \rangle \\
+&= \langle \Qoff{A} \qem \qoff{a} \qem \qon{b} \qem \Qon{B} \qem \Qon{C} \qem \qon{c} \qem \qoff{d} \qem \Qoff{D} \st \W \rangle + \text{other terms}\\
+&\geq \langle \Qoff{A} \qem \qoff{a} \qem \qon{b} \qem \Qon{B} \qem \Qon{C} \qem \qon{c} \qem \qoff{d} \qem \Qoff{D} \st \W \rangle \\
+&= \langle \Qno \qem \qoff{a} \qem \qon{b} \qem \Qno \qem \Qno \qem \qon{c} \qem \qoff{d} \qem \Qno \st \W \rangle \\
+&= \langle \Qno \qem \qoff{a} \qem \qon{b} \qem \Qno \qem \Qno \qem \qon{c} \qem \qoff{d} \qem \Qno \st \U \rangle \\
+&= \mu_\U(R).
+\end{align*}
+
+The other inequality follows by symmetry.
+\end{proof}
+
+\subsection{The stability theorem}
+
+Finally, we combine the above results to prove the stability theorem. Recall the statement:
+
+\begin{theorem}[Stability]
+Let $f, g : X \to \R$ be functions on a topological space $X$ and let $\U = H(X^f), \V = H(X^g)$ be the sublevel persistence modules. If $\U$ and $\V$ are q-tame, then:
+\begin{align*}
+d_b(\dgm(\U), \dgm(\V)) \leq \Vert f - g \Vert_\infty.
+\end{align*}
+\end{theorem}
+
+The first step is to apply the inequality $d_i(\U, \V) \leq \Vert f - g \Vert_\infty$. The stability theorem can be proven by showing that:
+\begin{align*}
+d_b(\dgm(\U), \dgm(\V)) \leq d_i(\U, \V).
+\end{align*}
+In other words,
+
+\begin{proposition}
+\label{prop-stability-1}
+Let $\U$, $\V$ be q-tame persistence modules that are $\eta$-interleaved for all $\eta > \delta$. Then there exists a $\delta$-matching between $\dgm(\U)$ and $\dgm(\V)$.
+\end{proposition}
+
+In view of Theorem~\ref{thm-bottleneck-inf-attained}, this is a consequence of the following easier proposition:
+
+\begin{proposition}
+Let $\U$, $\V$ be q-tame persistence modules that are $\delta$-interleaved. Then there exists a $\delta$-matching between $\dgm(\U)$ and $\dgm(\V)$.
+\end{proposition}
+
+Proposition~\ref{prop-stability-1} follows, because if there is a $\eta$-matching for all $\eta > \delta$, then there is a $\delta$-matching.
+
+The interpolation lemma states that there exists a family of persistence modules $\{\U_x \mid x \in [0, \delta]\}$ such that $\U_x$ and $\U_y$ are $|y-x|$-interleaved for all $x, y \in [0, \delta]$. Let $\{\mu_x\}$ be the associated r-measures.
+
+First we show that the `Hausdorff distance' between $\dgm(\mu_x)$ and $\dgm(\mu_y)$ is always less than $|y-x|$. Intuitively, the Hausdorff distance is similar to the bottleneck distance but we are permitted to match multiple points from one diagram to a single point in the other. 
+
+\begin{lemma}
+Let $\A = \dgm(\mu_x)$, $\B = \dgm(\mu_y)$ and $\eta = |y-x|$. Then:
+\begin{itemize}
+\item If $a \in \A$ and $d^\infty(a, \Delta) > \eta$ then there exists $b \in \B$ with $d^\infty(a, b) \leq \eta$; and,
+\item If $b \in B$ and $d^\infty(b, \Delta) > \eta$ then there exists $a \in \A$ with $d^\infty(a, b) \leq \eta$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+Let $a \in A$ be a point such that $d^\infty(a, \Delta) > \eta$. Choose an $\varepsilon$ such that $\eta + \varepsilon < d^\infty(a, \Delta)$. 
+
+By the box inequality, 
+\begin{align*}
+1 \leq \mu_x(a^\varepsilon) \leq \mu_y(a^{\eta + \varepsilon})
+\end{align*}
+and we have at least one point of $\B$ in $a^{\eta + \varepsilon}$. Because $\varepsilon$ was arbitrary and $\B$ is locally finite, there must be at least one point $b$ of $\B$ in $a^\eta$. It follows that $d^\infty(a, b) \leq \eta$.
+
+The second statement follows symmetrically.
+\end{proof}
+
+We now prove the theorem when $\dgm(\mu_x)$ is finite for all $x$. Once we have done this, we can finish off the proof of the main theorem using a compactness argument. For convenience we will write $\A_x = \dgm(\mu_x)$.
+
+\begin{lemma}
+If $\A_x$ is finite for all $x$, then the theorem holds.
+\end{lemma}
+\begin{proof}
+We claim that for every $x \in [0, \delta]$, there exists a number $\rho(x) > 0$ such that $\A_x, \A_y$ are $|y-x|$-matched whenever $|y - x| < \rho(x)$.
+
+Let $a_1, \dots, a_k$ be the distinct points of $\A_x$, with $n_1, \dots, n_k$ their multiplicities. Define $\rho(x)$ to be:
+\begin{align*}
+\rho(x) = \min \begin{cases}
+\tfrac{1}{2} d^\infty(a_i, \Delta) & \text{ for all } i\\
+\tfrac{1}{2} d^\infty(a_i, a_j) & \text{ for all } i, j.
+\end{cases}
+\end{align*}
+
+We must show that if $|y-x| < \rho(x)$ then $\A_x, \A_y$ are $|y-x|$-matched. Let $\eta = |y-x|$. By $\Delta^\eta$, we mean the thickening:
+\begin{align*}
+\Delta^\eta &= \{\alpha \in \R^2 \st d^\infty(\alpha, \Delta) \leq \eta\} \\
+&= \{(p, q) \in \R^2 \st q - p \leq 2 \eta\}.
+\end{align*}
+
+By the previous lemma, $\A_x$ and $\A_y$ have Hausdorff distance less than $\eta$. It follows that $\A_y$ is contained in the closed set:
+\begin{align*}
+\Delta^\eta \cup \alpha_1^\eta \cup \dots \cup \alpha_k^\eta.
+\end{align*}
+The definition of $\rho(x)$ is chosen so that all of these sets are disjoint.
+
+Choose $\epsilon > 0$ so that $2\eta + \varepsilon < 2 \rho(x)$. For every box $a_i^\eta$, the box lemma implies:
+\begin{align*}
+n_i = \mu_x(a_i^\varepsilon) \leq \mu_y(a_i^{\eta+\varepsilon}) \leq \mu_x(a_i^{2\eta+\varepsilon}) = n_i.
+\end{align*}
+We can therefore match the $n_i$ copies of $a_i$ with the points of $\A_y$ that are in the square $a_i^\eta$, for all $i$. The only unmatched points are the ones in $\Delta^\eta$, so this defines a valid partial matching.
+
+This shows that $\A_0$ and $\A_\delta = \B$ are $\delta$-matched by the following argument.
+
+The triangle inequality for matchings states that if $\A_0$, $\A_x$ are $x$-matched, and $\A_x$, $\A_y$ are $|y-x|$-matched, then $\A_0$, $\A_y$ are $y$-matched. We must show that we can continue matching in this way until $\A_0$ and $\A_\delta$ are $\delta$-matched.
+
+Let $m = \sup \{x\in [0, \delta] \st \text{$A_0$ and $A_x$ are $x$-matched}\}$. First we show that this $\sup$ is attained. Choose an $m'$, such that $m - m' < \rho(m)$. Then $\A_0$ and $\A_{m'}$ are $m'$-matched by the definition of $m$, and $\A_{m'}$ and $\A_m$ are $|m'-m|$-matched by the argument above. Therefore $\A_0$ and $\A_m$ are $m$-matched.
+
+Finally, we must have $m = \delta$. If $m < \delta$ then there exists a $m''$ with $m < m'' < \delta$ and $m'' - m < \rho(m)$. Again we have that $\A_0$ and $\A_{m''}$ are $m''$-matched, contradicting the definition of $m$.
+
+Therefore $\A_0$ and $\A_\delta$ are $\delta$-matched.
+\end{proof}
+
+\begin{theorem}
+The stability theorem holds, without assuming each $\A_x$ is finite.
+\end{theorem}
+\begin{proof}
+We prove this using a similar compactness argument to Theorem~\ref{thm-bottleneck-inf-attained}. Let $\{\H_n\}$ be an increasing sequence of open subsets of $\H$ such that the union of these sets is $\H$ and each $\H_n$ has compact closure.
+
+Because each $\A_x$ is locally finite, we have that $\A_x \cap \H_n$ is finite for all $x$ and $n$. By the previous lemma, for each $n$ we have a $\delta$-matching $\M_n$ between $\A_0 \cap \H_n$ and $\A_\delta \cap \H_n$.
+
+We now reuse the construction and arguments of Theorem~\ref{thm-bottleneck-inf-attained} to get a limit multiset $\M$. We must now verify that this $M$ gives a $\delta$-matching. Firstly, every matched pair is separated by at most $\delta$, as this is true for every $\M_n$. Secondly, every $a \in \A_0$ is matched with at most one $b \in \A_\delta$ and vice versa, for the same reason as before.
+
+All that remains to be checked is that every $a \in \A_0$ with $d^\infty(a, \Delta) > \delta$ is matched. Consider the thickening $a^\delta$ for some such $a$. This square is compact and contained in $\H$, so must be contained in $\H_n$ for $n$ sufficiently large. Therefore $a$ is matched in $\M_n$ for $n$ sufficiently large. Because $\A_\delta$ is locally finite, $\alpha$ has only finitely many points within $\delta$ distance from $a$. As in the earlier theorem, there exists an $n$ beyond which the matchings $\M_n$ all agree on this finite set. Because the $\M_n$ are all valid matchings, we conclude that $a$ is matched with some $b$ in $\M$.
+
+By symmetry, any $b \in \A_\delta$ with $d^\infty(b, \Delta) > \delta$ is matched in $\M$, so $\M$ is the required matching.
+\end{proof}

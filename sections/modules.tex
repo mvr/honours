@@ -1,0 +1,249 @@
+\section{Persistence Modules}
+\label{section-modules}
+
+In its first incarnation, persistent homology was an algorithm that given a filtration, directly produced a barcode. The previous section shows there is an intermediate object, the persistence module, that captures all the important algebraic data contained in the filtration. In this section we give a more general definition of persistence modules and derive some of their basic properties.
+
+As before, we fix a field $\mathbf{k}$ with all vector spaces over this field.
+
+\begin{definition}
+Let $\mathbf{P}$ be a partially ordered set. A \emph{persistence module $\V$ over $\mathbf{P}$} is a collection of vector spaces $\{V_t \st t \in \mathbf{P}\}$ and linear maps $\{v_s^t \st s, t \in \mathbf{P}, s \leq t\}$ such that for all $r \leq s \leq t$, we have $v_r^t = v_s^t \circ v_r^s$. 
+\end{definition}
+
+These linear maps are often called the \emph{structure maps} of $\V$. We recover the definition of the previous section when we set $P = \mathbf{N}$, the natural numbers. In what follows, we will mainly be interested in persistence modules over the real numbers $\R$. If $K$ is a filtration, we will write $H(K)$ for the persistence module induced by $K$.
+
+\begin{definition}
+If $\V$ is a persistence module over $\T$, and $\mathbf{P} \subset \T$, then the \emph{restriction of $\V$ to $\mathbf{P}$}, written $\V_{\mathbf{P}}$, is the persistence module obtained by forgetting the spaces and maps that lie outside $\mathbf{P}$. To be specific, $\V_{\mathbf{P}}$ is the persistence module with spaces and structure maps
+\begin{align*}
+(V_{\mathbf{P}})_t & = V_t \\
+(v_{\mathbf{P}})_s^t &= v_s^t
+\end{align*}
+for $s, t \in \mathbf{P}$.
+\end{definition}
+
+As with any algebraic object, we also require a notion of a mapping between persistence modules. 
+
+\begin{definition}
+A \emph{homomorphism} $\Phi : \U \to \V$ between two persistence modules over $\mathbf{P}$ is a collection of linear maps $\{ \phi_t : U_t \to V_t \st t \in \mathbf{P} \}$ such that the following diagram commutes for all $s \leq t$. 
+
+\begin{displaymath}
+\xymatrix{
+U_s \ar[d]_{\phi_s} \ar[r]^{u_s^t} & U_t \ar[d]^{\phi_t}\\
+V_s \ar[r]^{v_s^t} & V_t
+}
+\end{displaymath}
+
+We compose morphisms in the obvious way. Suppose we have $\Phi : \U \to \V$ and $\Psi : \V \to \W$, where $\Phi = \{\phi_t\}$ and $\Psi = \{\psi_t\}$. Then composition $\Psi \Phi$ is given by $\Psi \Phi = \{ \psi_t \phi_t \}$. To see that the relevant diagram commutes, notice that
+\begin{displaymath}
+\xymatrix{
+U_s \ar[d]_{\phi_s} \ar[r]^{u_s^t} & U_t \ar[d]^{\phi_t}\\
+V_s \ar[d]_{\psi_s} \ar[r]^{v_s^t} & V_t \ar[d]^{\psi_t}\\
+W_s \ar[r]^{w_s^t} & W_t
+}
+\end{displaymath}
+commutes, as both the top and bottom squares do.
+
+The \emph{identity} and \emph{zero} homomorphisms are just the identity and zero maps at each point. The \emph{image}, \emph{kernel} and \emph{cokernel} of a homomorphism are also defined pointwise with the canonical structure maps. For example, the kernel of $\Phi$ is given by:
+\begin{align*}
+\text{Ker}(\Phi)_t &= \ker(\phi_t) \\
+\ker(\Phi)_s^t &= u_s^t|_{\ker(\phi_t)}.
+\end{align*}
+\end{definition}
+
+For convenience, we also define $\Hom(\U, \V) = \{ \text{homomorphisms } \U\to\V \}$ and $\End(\V) = \Hom(\V, \V)$.
+
+\subsection{Interval modules}
+
+The simplest examples of persistence modules are the interval modules. These will correspond to points in our barcode.
+
+\begin{definition}
+Let $J \subseteq \R$ be an interval. Then $\I^J$ is defined to be the persistence module with spaces
+\begin{align*}
+I_t = \begin{cases}
+\mathbf{k} & \text{if } t \in J; \\
+0 & \text{otherwise}
+\end{cases}
+\end{align*}
+and maps
+\begin{align*}
+i_s^t = \begin{cases}
+1 & \text{if } t, s \in J; \\
+0 & \text{otherwise.}
+\end{cases}
+\end{align*}
+\end{definition}
+
+Over $\R$, providing the endpoints is not enough to determine the interval as the interval could be either closed or open on each end. To simplify the notation, we describe the endpoints of intervals using \emph{decorated real numbers}: real numbers with a superscript $+$ or $-$ annotation. For finite intervals, these decorated numbers are interpreted as follows:
+\begin{align*}
+(p^-, q^-) &= [p, q); \\
+(p^-, q^+) &= [p, q]; \\
+(p^+, q^-) &= (p, q); \\
+(p^+, q^+) &= (p, q]. 
+\end{align*}
+We also use the natural ordering
+\begin{align*}
+p^- < p < p^+ < q^- < q < q^+
+\end{align*}
+whenever $p < q$. If the annotation is unknown or unimportant, an asterisk is used. The expression $(p^*, q^*)$ with $p^* < q^*$ thus represents an arbitrary interval. 
+
+\subsection{Interval decompositions}
+
+We would like to be able to analyse persistence modules by decomposing them into interval modules. There is a natural definition for the sum of two persistence modules.
+
+\begin{definition}
+The \emph{direct sum} $\W = \U \oplus \V$ of two persistence modules is the persistence module with spaces and structure maps:
+\begin{align*}
+W_t = U_t \oplus V_t \\
+w_s^t = u_s^t \oplus v_s^t.
+\end{align*}
+\end{definition}
+
+This definition generalises in the obvious way to direct sums with arbitrary summands.
+
+We say that a persistence module $\W$ is \emph{indecomposable} if the only decompositions of the form $\W = \U \oplus \V$ are $\W \oplus 0$ and $0 \oplus \W$.
+
+\begin{proposition}
+Interval modules are indecomposable.
+\end{proposition}
+\begin{proof}
+Let $\I$ be an interval module with decomposition $\I = \U \oplus \V$. Then the projection maps onto $\U$ and $\V$ are idempotent elements of $\End(\I)$. Any endomorphism of $\I$ acts on each $I_t$ by scalar multiplication and, as the structure maps are commutative, the scalar must be the same for each $t$. Therefore, $\End(\I) = \mathbf{k}$, and the only idempotents are $0$ and $1$. Our projection maps are therefore either $0$ or $1$, so we must have one map $0$ and the other map $1$ as required.
+\end{proof}
+
+If our persistence module is decomposable into interval modules, the following theorem guarantees that the decomposition is unique up to reordering. The theorem is the analogue of the Krull-Schmidt theorem \cite{azumaya1950corrections} for group decompositions, which has since been generalised to many algebraic objects for which `decomposition' makes sense.
+
+\begin{theorem}[Krull-Schmidt-Azumaya]
+Suppose a persistence module $\V$ is decomposable into interval modules in two different ways:
+\begin{align*}
+\V = \bigoplus_{l \in L} \I^{J_l} = \bigoplus_{m \in M} \I^{K_m}.
+\end{align*}
+Then $|L| = |M|$, and there exists a permutation $\pi$ such that $J_l = K_{\pi(l)}$ for all $l \in L$.
+\end{theorem}
+\begin{proof} Here we specialise an argument given by Barot \cite{barot2006representations} for decompositions with finitely many summands. Let $\Phi : \V \to \W$ be an isomorphism, and let $\V = \V_1 \oplus \dots \oplus \V_n$ and $\W = \W_1 \oplus \dots \oplus \W_m$ be interval decompositions.
+
+We can write $\Phi$ as a matrix $\Phi = (\Phi_{ji})$ where each $\Phi_{ji}$ is a homomorphism $\V_i \to \W_j$. Similarly, we can write $\Phi^{-1} = \Psi$ as a matrix $(\Psi_{ji})$. Consider: 
+\begin{align*}
+\mathbf{1}_{\V_1} = (\Psi \Phi)_{11} = \sum_{l=1}^j \Psi_{1l} \Phi_{l1}.
+\end{align*}
+As the left-hand side is nonzero, one of the summands $\Psi_{1l} \Phi_{l1}$ must be nonzero. Without loss of generality, assume $\Psi_{11} \Phi_{11}$ is nonzero and therefore invertible. Because $\V_1$ and $\W_1$ are indecomposable, $\Psi_{11}$ and $\Phi_{11}$ are onto and hence are themselves invertible.
+
+Now we construct two change of basis matrices:
+\begin{align*}
+\alpha = \begin{pmatrix}
+\mathbf{1}_{\W_1} & 0 & \cdots & 0 \\
+-\Phi_{21} \Phi_{11}^{-1} & \mathbf{1}_{\W_2} & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+-\Phi_{m1} \Phi_{11}^{-1} & 0 & \cdots & \mathbf{1}_{\W_m} \\
+\end{pmatrix} \quad 
+\beta = \begin{pmatrix}
+\mathbf{1}_{\V_1} & -\Phi_{11}^{-1} \Phi_{12} & \cdots & -\Phi_{11}^{-1} \Phi_{1n} \\
+0 & \mathbf{1}_{\V_2} & \cdots & 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & \cdots & \mathbf{1}_{\V_m} \\
+\end{pmatrix}
+\end{align*}
+and set $\Phi' = \alpha \Phi \beta$. Then $\Phi' : \V \to \W$ is another isomorphism of the form $\Phi' = \begin{pmatrix}
+\Phi_{11} & 0\\
+0 & \Lambda
+\end{pmatrix}$ 
+with $\Lambda : \bigoplus_{i=2}^n \V_i \to \bigoplus_{j=2}^m \W_j$ an isomorphism of the remaining summands. The result follows by induction.
+
+The infinite case is much harder, and we refer the reader to Azumaya \cite{azumaya1950corrections}. To apply this theorem, the indecomposable modules must satisfy a certain condition: that $\End(\I)$ be a `local' ring. As $\End(\I) = \mathbf{k}$ is a field and all fields are local, this condition is satisfied. In the finite case above, this property is required to conclude that one of $\Psi_{1l} \Phi_{l1}$ is invertible.
+\end{proof}
+
+We saw in the previous section that if our indexing set is a finite subset of $\R$ and the vector spaces are pointwise finite dimensional then the persistence module decomposes into interval modules. A number of researchers have independently shown that we can drop the restriction on the dimension of the vector spaces:
+
+\begin{theorem}[Auslander \cite{auslander1974representation}]
+Let $\T$ be a finite, totally ordered set. Then any persistence module over $\T$ decomposes as a sum of interval modules.
+\label{thm-finite-decomposition}
+\end{theorem}
+
+The theorem is false for arbitrary persistence modules. The following module provides a counterexample.
+
+\begin{example}[Webb \cite{chazal2012structure}]
+Let $\V$ be the persistence module over the non-positive integers with spaces
+\begin{align*}
+V_0 &= \{ \text{sequences of real numbers } (x_1, x_2, \dots) \}\\
+V_{-n} &= \{ \text{sequences with } x_1 = \dots = x_n = 0 \} \text{ for } n \geq 1
+\end{align*}
+and structure maps the natural inclusions $v_{-m}^{-n}$ for $m \geq n$.
+
+First note that $\dim(V_0)$ is uncountable. Any vector in a vector space must be able to be written as a linear combination of finitely many basis elements. It can be proven that no countable basis exists for sequences of real numbers.
+
+Now, because the structure maps are all injective, the intervals in an interval decomposition must all be of the form $[-n, 0]$. Since $\dim(V_{-n}/V_{-n-1}) = 1$, each $[-n,0]$ occurs with multiplicity 1. This implies that $\V \cong \bigoplus_{n\geq0} \I[-n, 0]$, which contradicts the fact that $\dim(V_0)$ is uncountable.
+\end{example}
+
+\subsection{Quiver calculations}
+
+In this section, we introduce some notation that will simplify future calculations. We then prove some basic properties of persistence modules over finite sets using this tool. 
+
+A persistence module $\V$ over a finite set $a_1 < a_2 < \dots < a_n$ can be thought of as a diagram of vector spaces:
+\begin{align*}
+V_{a_1} \to V_{a_2} \to \dots \to V_{a_n}
+\end{align*}
+
+Diagrams of this sort are also known as `quiver representations of type $A_n$'. Theorem~\ref{thm-finite-decomposition} states that such a persistence module decomposes as a sum of interval modules. Because we are over a finite set, we can represent such interval modules pictorially. We use filled circles to represent indices where the module is $\mathbf{k}$ and open circles for where the module is 0.
+
+Consider the finite set $a < b < c$. There are precisely six interval modules over $\{a, b, c\}$:
+\begin{align*}
+\I[a, a] &= \qon{a} \qem \qoff{b} \qem \qoff{c} \qquad \I[a, b] = \qon{a} \qem \qon{b} \qem \qoff{c} \qquad \I[a, c] = \qon{a} \qem \qon{b} \qem \qon{c}\\
+\I[b, b] &= \qoff{a} \qem \qon{b} \qem \qoff{c} \qquad \I[b, c] = \qoff{a} \qem \qon{b} \qem \qon{c} \\
+\I[c, c] &= \qoff{a} \qem \qoff{b} \qem \qon{c} 
+\end{align*}
+
+\begin{definition}
+Let $\V$ be a persistence module over $\R$ and $\T \subset \R$ a finite subset. Given an arbitrary interval module 
+\begin{align*}
+\I = \: \qoff{r} \qem \dots \qem \qoff{} \qem \qon{a} \qem \dots \qem \qon{b} \qem \qoff{} \qem \dots \qem \qoff{s}
+\end{align*}
+on $\T$, we write
+\begin{align*}
+\langle \I \st \V_\T \rangle \text{ or } \langle \qoff{r} \qem \dots \qem \qoff{} \qem \qon{a} \qem \dots \qem \qon{b} \qem \qoff{} \qem \dots \qem \qoff{s} \st \V \rangle \text{ or } \langle [a, b] \st \V_\T \rangle
+\end{align*}
+for the multiplicity of $\I$ in the interval decomposition of $\V_\T$. We will omit $\V_\T$ when the persistence module and indexing sets are clear.
+\end{definition}
+
+\begin{example}
+Consider one of the structure maps $v_s^t : V_s \to V_t$. Then:
+\begin{align*}
+\langle \qon{s} \qem \qon{t} \st \V \rangle = \rank(v_s^t).
+\end{align*}
+\end{example}
+
+If our persistence module is the direct sum of simpler modules, the multiplicity of an interval is simply the sum of the multiplicities in these simpler modules.
+
+\begin{proposition}
+\label{quiver-direct-sums}
+Let $\V$ be written as a direct sum
+\begin{align*}
+\V = \bigoplus_{i \in I} \V^i.
+\end{align*}
+Then
+\begin{align*}
+\langle [a, b] \st \V_\T \rangle = \sum_{i\in I} \langle [a, b] \st \V_\T^i \rangle
+\end{align*}
+for any interval module $[a, b]$ in a finite indexing set $\T$.
+\end{proposition}
+\begin{proof}
+Individually decompose the $\V_\T^i$ into interval modules as in Theorem~\ref{thm-finite-decomposition}. The sum of all these interval modules is a decomposition of $\V_\T$. The multiplicity of $[a, b]$ in $\V_\T$ is then the sum of the multiplicities in $\V_\T^i$.
+\end{proof}
+
+The final property of the multiplicities we discuss here is the so called `restriction principle'. This allows us to relate the multiplicities of different finite restrictions of the same module.
+
+\begin{proposition}
+Let $\S$ and $\T$ be finite index sets with $\S \subset \T$. For any interval module $\I$ over $\S$,
+\begin{align*}
+\langle \I \st \V_\S \rangle = \sum_\J \langle \J \st \V_\T \rangle
+\end{align*}
+where $\J$ runs over all interval modules in $\T$ that restrict to $\I$ over $\S$.
+\end{proposition}
+
+\begin{example}
+Consider the finite indexing set $a < p < b < q < c$. Then:
+\begin{align*}
+\langle \qoff{a} \qem \qno \qem \qon{b} \qem \qno \qem \qon{c} \rangle = \langle \qoff{a} \qem \qoff{p} \qem \qon{b} \qem \qon{q} \qem \qon{c} \rangle + \langle \qoff{a} \qem \qon{p} \qem \qon{b} \qem \qon{q} \qem \qon{c} \rangle
+\end{align*}
+\end{example}
+
+\begin{proof}
+Consider an interval decomposition of $\V_\T$. This restricts to an interval decomposition of $\V_\S$. Instances of $\I$ in this decomposition appear precisely when the interval $\J$ restricts to $\I$ over $\S$.
+\end{proof}
+

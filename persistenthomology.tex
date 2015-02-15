@@ -1,0 +1,176 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{relsize}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usepackage[all]{xy}
+\usepackage{listings}
+\usepackage{enumerate}
+\usepackage[a4paper,margin=1.3in,footskip=.5cm]{geometry}
+
+%\includeonly{sections/observable}
+
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\coker}{coker}
+\DeclareMathOperator{\colim}{colim}
+\DeclareMathOperator{\rad}{rad}
+\DeclareMathOperator{\Rect}{Rect}
+\DeclareMathOperator{\Hom}{Hom}
+\DeclareMathOperator{\Ob}{Ob}
+\DeclareMathOperator{\End}{End}
+\newcommand{\del}{\partial}
+
+\newcommand{\R}{\mathbf{R}}
+\renewcommand{\k}{\mathbf{k}}
+\newcommand{\N}{\mathbf{N}}
+\renewcommand{\S}{\mathbf{S}}
+\newcommand{\T}{\mathbf{T}}
+\newcommand{\W}{\mathbb{W}}
+\newcommand{\U}{\mathbb{U}}
+\newcommand{\V}{\mathbb{V}}
+\newcommand{\I}{\mathbb{I}}
+\newcommand{\J}{\mathbb{J}}
+\newcommand{\A}{\mathsf{A}}
+\newcommand{\B}{\mathsf{B}}
+\newcommand{\M}{\mathsf{M}}
+\renewcommand{\H}{\mathcal{H}}
+\newcommand{\Dgm}{\mathsf{Dgm}}
+\newcommand{\dgm}{\mathsf{dgm}}
+\newcommand{\st}{\, \mid \,}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\natto}{\Rightarrow}
+
+\newcommand{\rint}{\mathsmaller{\mathsmaller{\mathsmaller{\blacksquare}}}}
+
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{definition}[theorem]{Definition}
+\makeatletter
+\@addtoreset{theorem}{section}
+\makeatother
+
+%------------------------------------------------------------------------------------------
+% quiver calculus commands
+%------------------------------------------------------------------------------------------
+
+\newcommand{\qlen}{1em}
+\newcommand{\Qlen}{1.5em}
+\newcommand{\QQlen}{3em}
+
+\newcommand{\qem}{\makebox[\qlen]{---}}
+
+% short
+\newcommand{\qno}{\makebox[\qlen]{---}}  
+\newcommand{\qon}[1]{\makebox[\qlen]{$_{\phantom{}}\bullet_{#1}$}}
+\newcommand{\qoff}[1]{\makebox[\qlen]{$_{\phantom{}}\circ_{#1}$}}
+
+% medium
+\newcommand{\Qno}{\makebox[\Qlen]{--{}--{}--}}
+\newcommand{\Qon}[1]{\makebox[\Qlen]{$_{\phantom{}}\bullet_{#1}$}}
+\newcommand{\Qoff}[1]{\makebox[\Qlen]{$_{\phantom{}}\circ_{#1}$}}
+
+% long
+\newcommand{\QQno}{\makebox[\QQlen]{--{}--{}--{}--{}--{}--}}
+\newcommand{\QQon}[1]{\makebox[\QQlen]{$_{\phantom{}}\bullet_{#1}$}}
+\newcommand{\QQoff}[1]{\makebox[\QQlen]{$_{\phantom{}}\circ_{#1}$}}
+
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{persistenthomology.bib}
+
+\begin{document}
+\pagenumbering{gobble}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\begin{titlepage}
+\begin{center}
+\textsc{\LARGE University of Queensland}\\[0.5cm]
+\textsc{\Large Honours thesis}\\[1.5cm]
+
+% Title
+\HRule \\[0.4cm]
+{ \huge \bfseries Persistence Modules over $\mathbf{R}$ \\[0.4cm] }
+
+\HRule \\[1.5cm]
+
+% Author and supervisor
+\noindent
+\begin{minipage}{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+Mitchell Riley
+\end{flushleft}
+\end{minipage}%
+\begin{minipage}{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisor:} \\
+A/Prof Benjamin Burton
+\end{flushright}
+\end{minipage}
+
+\vfill
+
+% Bottom of the page
+{\large November 11, 2014}
+
+\end{center}
+\end{titlepage}
+
+\clearpage
+\vspace*{\fill}
+%\thispagestyle{empty} 
+\begin{quotation}
+\emph{Persistence is to the character of man as carbon is to steel.}
+
+\medskip
+\raggedleft
+\MakeUppercase{Napoleon Hill}
+
+\end{quotation}
+\vspace*{\fill}
+\vspace*{\fill}
+\newpage
+
+\null\vspace{\fill} 
+\renewcommand{\abstractname}{Acknowledgements}
+\begin{abstract}
+I would like to express my gratitude to my supervisor Ben Burton for putting up with my frequent changes in thesis topic and direction. I apologise that this computational topology project turned out to have little to do with computation or topology!
+
+I also owe a debt to my fellow honours students, without whom this year would not have been nearly as much fun.	
+\end{abstract}
+\vspace{\fill}
+
+\newpage
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\include{sections/introduction}
+\include{sections/background}
+\include{sections/standard}
+\include{sections/modules}
+\include{sections/diagrams}
+\include{sections/stability}
+\include{sections/categorytheory}
+\include{sections/observable}
+
+\newpage
+\nocite{*}
+\printbibliography
+
+\appendix
+
+\include{sections/code}
+
+\end{document}

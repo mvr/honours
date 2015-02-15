@@ -1,0 +1,145 @@
+\section{Category Theory Primer}
+\label{section-category-theory}
+
+Like much of algebraic topology, the theory of persistence modules has been reinterpreted using the language of category theory. This section introduces the main concepts used in category theory and shows how many of the constructions we've seen fit into this viewpoint.
+
+In the following chapter we will use these techniques to prove a strong structure theorem for q-tame persistence modules.
+
+\begin{definition}
+A \emph{category} $\C$ consists of:
+\begin{itemize}
+\item a class $\Ob(\C)$ of objects;
+\item for every $a, b \in \Ob(\C)$, a class $\Hom(a, b)$ of morphisms; and,
+\item for every $a, b, c \in \Ob(\C)$, a binary operation
+\begin{align*}
+\Hom(b, c) \times \Hom(a, b) &\to \Hom(a, c), \qquad (g, f) \mapsto g\circ f \text{ or } gf
+\end{align*}
+\end{itemize}
+such that:
+\begin{itemize}
+\item morphism composition is \emph{associative}: if $f : a \to b$, $g : b \to c$ and $h : c \to d$ then $f \circ (g \circ h) = (f \circ g)\circ h$; and,
+\item every object has an \emph{identity} morphism: for every $a \in \Ob(\C)$, there exists a morphism $1_a \in \Hom(a, a)$ such that for every $f : x \to a$, $1_a \circ f = f$ and for every $g : a \to y$, $g \circ 1_a = g$.
+\end{itemize}
+\end{definition}
+
+Many familiar mathematical objects form a category. We have the categories:
+\begin{itemize}
+\item $\mathbf{Set}$, of sets and functions;
+\item $\mathbf{Top}$, of topological spaces and continuous maps;
+\item $\mathbf{Grp}$, of groups and homomorphisms; and,
+\item $\mathbf{Vect}_\mathbf{k}$, of $\mathbf{k}$-vector spaces and linear maps.
+\end{itemize} 
+It is routine to check that these classes satisfy the conditions for a category above.
+
+The morphisms in a category are often functions with some added conditions, but this is not always the case. Given any poset $P$, we can consider $P$ as a category by taking the elements of $P$ as our objects, and including precisely one morphism $s \to t$ for each $s \leq t$.
+
+We can apply category theory to the study of persistence because, given a indexing poset $P$, the class of persistence modules together with module homomorphisms forms a category $\mathbf{Pers}_P$. 
+
+A \emph{subcategory} $\mathcal{S}$ of a category $\C$ is a category with objects and morphisms subcollections of the objects and morphisms of $\C$. We require that these objects and morphisms form a valid category.
+
+A subcategory $\mathcal{S}$ is \emph{full} if for every $a, b \in \Ob(\mathcal{S})$, we have $\Hom_\mathcal{S}(a, b) = \Hom_\C(a, b)$. In other words, $\mathcal{S}$ includes all the morphisms between $a$ and $b$ that exist in $\C$.
+
+\subsection{Functors and natural transformations}
+
+The next fundamental concept in category theory is the notion of a \emph{functor} between two categories.
+
+\begin{definition}
+Given two categories $\C, \D$, a \emph{functor} $F : \C \to \D$ is a mapping that assigns:
+\begin{itemize}
+\item to every object $c \in \C$ an object $F(c) \in \D$; and,
+\item to every morphism $f : x \to y$ in $\C$, a morphism $F(f) : F(x) \to F(y)$ in $\D$
+\end{itemize}
+such that:
+\begin{align*}
+F(1_a) &= 1_{F(a)} \\
+F(g \circ f) &= F(g) \circ F(f).
+\end{align*}
+\end{definition}
+
+The most important example of a functor we have seen so far is homology. If the ground ring is a field $\k$, then $H_n(-) : \mathbf{Top} \to \mathbf{Vect}_\k$ is a functor assigning to each space $X$ the $n$-dimensional homology of $X$, and to each continuous map $f : X \to Y$ the linear map given by Theorem~\ref{homology-functor}.
+
+In fact, persistence modules themselves can be thought of as functors. Let $P$ be a poset. Then persistence modules over $P$ are precisely functors $\V : P \to \mathbf{Vect}_\k$, where we consider $P$ as a category using the construction earlier.
+
+Moving up the abstraction tower, we can also define \emph{natural transformation}s between two functors.
+
+\begin{definition}
+Given two functors $F, G : \C \to \D$, a \emph{natural transformation} $\tau : F \natto G$ is a function that assigns to every object $c \in \C$, a morphism $\tau_c : F(c) \to G(c)$ in $\D$, such that for every $f : c \to c'$ in $\C$, the diagram
+\begin{displaymath}
+\xymatrix{
+F(c) \ar[d]_{F(f)} \ar[r]^{\tau_c} & G(c) \ar[d]^{G(f)}\\
+F(c') \ar[r]^{\tau_{c'}} & G(c')
+}
+\end{displaymath}
+commutes.
+\end{definition}
+
+If we choose two categories $\C, \D$, we can form the \emph{functor category} $[\C, \D]$ which has as its objects the class of all functors $\C \to \D$, and morphisms the natural transformations between them.
+ 
+A module homomorphism $\U \to \V$ is precisely a natural transformation between the modules, when we consider the modules as functors. We can therefore make the identification $\mathbf{Pers}_P = [P, \mathbf{Vect}_\k]$.
+
+\subsection{Limits and colimits}
+
+The utility of category theory becomes apparent when we consider the `universal' objects that often appear in mathematics. A common template for new constructions is to find the simplest object that satisfies certain properties. 
+
+Consider the `direct product' operation on sets. In the case of sets, we know the direct product $A \times B$ is the collection of all ordered pairs $(a, b)$ with $a \in A, b \in B$. We could instead characterise the direct product as the `universal' object with maps to the two components.
+
+\begin{definition}
+The direct product of two sets $A$ and $B$ is the unique set $A \times B$ with two maps $\pi_1 : A \times B \to A$ and $\pi_2 : A \times B \to B$ such that whenever some other set $C$ exists with maps $\phi_1 : C \to A$, $\phi_2 : C \to B$, these maps factor through a unique map $u : C \to A \times B$.
+\begin{displaymath}
+\xymatrix{
+& C \ar@/_1pc/[ddl]_{\phi_1} \ar@/^1pc/[ddr]^{\phi_2} \ar@{-->}[d]_u & \\
+& A \times B \ar[dl]_{\pi_1} \ar[dr]^{\pi_2} & \\
+A & & B
+}
+\end{displaymath}
+\end{definition}
+
+A \emph{limit} in category theory is the generalisation of this idea.
+
+\begin{definition}
+Let $F : \mathcal{J} \to \C$ be a functor. A \emph{cone to $F$} is an object $C$ of $\C$ together with a family of morphisms $\phi_X : C \to F(X)$ for every $X \in \mathcal{J}$, such that the following diagram commutes for every $f : X \to Y$ in $\mathcal{J}$.
+\begin{displaymath}
+\xymatrix{
+& C \ar[dl]_{\phi_X} \ar[dr]^{\phi_Y}  & \\
+F(X) \ar[rr]_{F(f)} & & F(Y)
+}
+\end{displaymath}
+
+The \emph{limit} of $F$ is a cone $(L, \pi_X)$ to $F$ such that for any other cone $(C, \phi_X)$ to $F$, there is a unique morphism $u : C \to L$ such that $\phi_X = \pi_X \circ u$ for all $X \in \mathcal{J}$. In other words, there exists a morphism $u$ making the following diagram commute:
+\begin{displaymath}
+\xymatrix{
+& C \ar@/_1pc/[ddl]_{\phi_X} \ar@/^1pc/[ddr]^{\phi_Y} \ar@{-->}[d]_u & \\
+& L \ar[dl]_{\pi_X} \ar[dr]^{\pi_Y} & \\
+F(X) \ar[rr]_{F(f)} &  & F(Y)
+}
+\end{displaymath}
+
+A limit is \emph{small} if in the indexing category $\mathcal{J}$, the collection of objects and morphisms forms a set and not a proper class.
+\end{definition}
+
+We recover the above example when we set $\mathcal{J}$ to the discrete category $\{1, 2\}$, $\C$ to the category $\mathbf{Set}$, and $F$ to the functor assigning $F(1) = A$ and $F(2) = B$.
+
+A \emph{colimit} is the categorical dual of a limit, which we can define by reversing the arrows in the definition above.
+
+\begin{definition}
+Let $F : \mathcal{J} \to \C$ be a functor. A \emph{cocone from $F$} is an object $C$ of $\C$ together with a family of morphisms $\phi_X : F(X) \to C$ for every $X \in \mathcal{J}$, such that the following diagram commutes for every $f : X \to Y$ in $\mathcal{J}$.
+\begin{displaymath}
+\xymatrix{
+F(X) \ar[rr]^{F(f)} \ar[dr]_{\phi_X} & & F(Y) \ar[dl]^{\phi_Y} \\
+& C &
+}
+\end{displaymath}
+
+The \emph{colimit} of $F$ is a cocone $(L, \pi_X)$ from $F$ such that for any other cocone $(C, \phi_X)$ from $F$, there is a unique morphism $u : L \to C$ such that $\phi_X = u \circ \pi_X$ for all $X \in \mathcal{J}$. In other words, there exists a morphism $u$ making the following diagram commute:
+\begin{displaymath}
+\xymatrix{
+F(X) \ar[rr]^{F(f)} \ar[dr]_{\pi_X} \ar@/_1pc/[ddr]_{\phi_X} & & F(Y) \ar[dl]^{\pi_Y} \ar@/^1pc/[ddl]^{\phi_Y} \\
+& L \ar@{-->}[d]_u & \\
+& C &
+}
+\end{displaymath}
+\end{definition}
+
+If we choose $\mathcal{J} = \{1, 2\}$, $\C = \mathbf{Set}$, and $F$ the functor $F(1) = A$ and $F(2) = B$ as before, the colimit of $F$ is the disjoint union $A \coprod B$. The maps $\pi_1, \pi_2$ are then the inclusions of $A$ and $B$ into $A \coprod B$.
+
+Limits and colimits do not necessarily always exist. A category is called \emph{complete} if it contains all small limits, and \emph{cocomplete} if it contains all small colimits. The categories $\mathbf{Set}$ and $\mathbf{Vect}_\mathbf{k}$ are both complete and cocomplete.

@@ -1,0 +1,351 @@
+\documentclass[11pt]{beamer}
+\usetheme{Dresden}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage[backend=bibtex]{biblatex}
+\addbibresource{talkslides.bib}
+
+\input{vrcomplex}
+
+\author{Mitchell Riley \\ Supervisor: Ben Burton}
+\title{Persistence Modules and Stability}
+\date{17th October 2014}
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}{}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\section{Persistent Homology}
+
+\begin{frame}
+\frametitle{Singular Homology}
+Choose a dimension $n$, then
+\begin{align*}
+H_n(-) &: \mathbf{Top} \to \mathbf{Ab}
+\end{align*}
+describes the $n$-dimensional `holes'.
+\end{frame}
+
+\begin{frame}
+\begin{columns}[c]
+\column{.3\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=1]
+\draw (1, 1) circle (1cm);
+\end{tikzpicture}
+\end{center}
+\begin{align*}
+  H_0(\mathbb{S}^1) &= \mathbb{Z} \\
+  H_1(\mathbb{S}^1) &= \mathbb{Z} \\
+  H_2(\mathbb{S}^1) &= \{1\}
+\end{align*}
+\uncover<2->{\column{.3\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=1]
+    \draw (-1,0) arc (180:360:1cm and 0.5cm);
+    \draw[dashed] (-1,0) arc (180:0:1cm and 0.5cm);
+    \draw (0,1) arc (90:270:0.5cm and 1cm);
+    \draw[dashed] (0,1) arc (90:-90:0.5cm and 1cm);
+    \draw (0,0) circle (1cm);
+\end{tikzpicture}
+\end{center}
+\begin{align*}
+  H_0(\mathbb{S}^2) &= \mathbb{Z} \\
+  H_1(\mathbb{S}^2) &= \{1\} \\
+  H_2(\mathbb{S}^2) &= \mathbb{Z}
+\end{align*}
+}
+\uncover<3->{\column{.3\textwidth}
+\begin{center}
+\begin{tikzpicture}[scale=0.4]
+\draw (-3.5,0) .. controls (-3.5,2) and (-1.5,2.5) .. (0,2.5);
+\draw[xscale=-1] (-3.5,0) .. controls (-3.5,2) and (-1.5,2.5) .. (0,2.5);
+\draw[rotate=180] (-3.5,0) .. controls (-3.5,2) and (-1.5,2.5) .. (0,2.5);
+\draw[yscale=-1] (-3.5,0) .. controls (-3.5,2) and (-1.5,2.5) .. (0,2.5);
+
+\draw (-2,.2) .. controls (-1.5,-0.3) and (-1,-0.5) .. (0,-.5) .. controls (1,-0.5) and (1.5,-0.3) .. (2,0.2);
+
+\draw (-1.75,0) .. controls (-1.5,0.3) and (-1,0.5) .. (0,.5) .. controls (1,0.5) and (1.5,0.3) .. (1.75,0);
+\end{tikzpicture}
+\end{center}
+\begin{align*}
+  H_0(\mathbb{T}^2) &= \mathbb{Z} \\
+  H_1(\mathbb{T}^2) &= \mathbb{Z} \oplus \mathbb{Z} \\
+  H_2(\mathbb{T}^2) &= \mathbb{Z}
+\end{align*}
+}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Singular Homology}
+\begin{theorem}
+A continuous map $f : X \to Y$ induces a homomorphism $f_* : H_k(X) \to H_k(Y)$ for all $k$.
+\end{theorem}
+\end{frame}
+
+\begin{frame}
+\frametitle{Singular Homology}
+\begin{align*}
+H_n(-) &: \mathbf{Top} \to \mathbf{Ab}\\
+\uncover<2->{H_n(-; R) &: \mathbf{Top} \to R\textrm{-}\mathbf{Mod}} \\
+\uncover<3->{H_n(-; \mathbf{k}) &: \mathbf{Top} \to \mathbf{Vect_k}} \\
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\annuluscomplex{0}
+\end{frame}
+
+\begin{frame}
+\frametitle{$r=2$}
+\annuluscomplex{2}
+\begin{align*}
+  H_0(X) &= \mathbb{Z} \\
+  H_1(X) &= \mathbb{Z}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{$r=0.3$}
+\annuluscomplex{0.3}
+\begin{align*}
+  H_0(X) &= \mathbb{Z}^{73} \\
+  H_1(X) &= \{1\}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{$r=10$}
+\annuluscomplex{10}
+\begin{align*}
+  H_0(X) &= \mathbb{Z} \\
+  H_1(X) &= \{1\}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\annuluscomplex{0.3}
+\begin{align*}
+X_{1} \invisible{\subset X_{2} \subset X_{3} \subset X_{4} \subset X_{5}}
+\end{align*}
+\end{frame}
+\begin{frame}
+\annuluscomplex{0.6}
+\begin{align*}
+X_{1} \subset X_{2} \invisible{\subset X_{3} \subset X_{4} \subset X_{5}}
+\end{align*}
+\end{frame}
+\begin{frame}
+\annuluscomplex{1}
+\begin{align*}
+X_{1} \subset X_{2} \subset X_{3} \invisible{\subset X_{4} \subset X_{5}}
+\end{align*}
+\end{frame}
+\begin{frame}
+\annuluscomplex{4}
+\begin{align*}
+X_{1} \subset X_{2} \subset X_{3} \subset X_{4} \invisible{\subset X_{5}}
+\end{align*}
+\end{frame}
+\begin{frame}
+\annuluscomplex{8}
+\begin{align*}
+X_{1} \subset X_{2} \subset X_{3} \subset X_{4} \subset X_{5}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+We have a filtration:
+\begin{align*}
+X_{1} \subset X_{2} \subset X_{3} \subset X_{4} \subset X_{5}
+\end{align*}
+
+This gives us a diagram of spaces with inclusion maps:
+\begin{align*}
+X_{1} \to X_{2} \to X_{3} \to X_{4} \to X_{5}
+\end{align*}
+
+Now find the homology of each space, giving a diagram of groups and homomorphisms:
+\begin{align*}
+H(X_{1}) \to H(X_{2}) \to H(X_{3}) \to H(X_{4}) \to H(X_{5})
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Zomorodian and Carlsson (2005)}
+If the ground ring is a field $\mathbf{k}$, we have a diagram of $\mathbf{k}$-vector spaces.
+
+\begin{theorem}
+Any finite diagram of finite dimensional vector spaces decomposes into a sum of intervals.
+\end{theorem}
+\end{frame}
+
+\begin{frame}
+\frametitle{Zomorodian and Carlsson (2005)}
+\begin{gather*}
+H_0(X_{1}) \to H_0(X_{2}) \to H_0(X_{3}) \to H_0(X_{4}) \to H_0(X_{5}) \\
+\parallel \\ \mathbf{k} \to \mathbf{k} \to \mathbf{k} \to \mathbf{k} \to \mathbf{k} \\[1px]
+\oplus \\ \mathbf{k} \to \mathbf{k} \to 0 \to 0 \to 0 \\
+\oplus \\ \mathbf{k} \to 0 \to 0 \to 0 \to 0 \\
+\oplus \\ \mathbf{k} \to 0 \to 0 \to 0 \to 0 \\
+\vdots \\
+\uncover<2->{\mathcal{B}_0 = \{[1, 5], [1, 3), [1, 2), [1, 2), \dots \}}
+\end{gather*}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Zomorodian and Carlsson (2005)}
+\begin{gather*}
+H_1(X_{1}) \to H_1(X_{2}) \to H_1(X_{3}) \to H_1(X_{4}) \to H_1(X_{5}) \\
+\parallel \\ 0 \to \mathbf{k} \to \mathbf{k} \to \mathbf{k} \to 0 \\
+\oplus \\ 0 \to \mathbf{k} \to 0 \to 0 \to 0 \\
+\oplus \\ 0 \to 0 \to \mathbf{k} \to 0 \to 0 \\
+\vdots
+\end{gather*}
+
+\begin{align*}
+\mathcal{B}_1 = \{[2,5), [2,3), [2,3), \dots \}
+\end{align*}
+\end{frame}
+
+\begin{frame}
+\frametitle{Zomorodian and Carlsson (2005)}
+\begin{definition}
+A \emph{barcode} (or \emph{persistence diagram}) is a multiset of points in the half plane
+\begin{align*}
+\mathcal{H} = \{ (p, q) \in \mathbb{R}^2 : p < q \}
+\end{align*}
+\end{definition}
+\pause
+\begin{center}
+\includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{diagram.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{The Story So Far}
+\belowdisplayskip=3pt
+\abovedisplayskip=3pt
+\begin{itemize}[<+->]
+\item Begin with a data set $K \subset \mathbb{R}^n$
+\begin{align*}
+K = \{(0.125, 0.72), (0.627, 0.92), \dots \}
+\end{align*}
+\item Construct a filtration $\{X_i\}$
+\begin{align*}
+X_1 \subseteq X_2 \subseteq \dots
+\end{align*}
+\item Calculate homology of each space
+\begin{align*}
+H(X_1) \to H(X_2) \to \dots
+\end{align*}
+\item Determine the barcode of this diagram of vector spaces
+\begin{align*}
+\mathcal{B} = \{[0, 3), [2, 5), \dots\}
+\end{align*}
+\item Find features with long intervals
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Applications}
+\begin{itemize}
+\item Analysis of treatment response in breast cancer patients (DeWoskin et al, 2010)
+\item Natural language processing (Zhu, 2013)
+\item Computer vision (Lamar-Le\'{o}n et al, 2012)
+\end{itemize}
+\end{frame}
+
+\section{Persistence Modules}
+
+\begin{frame}
+\frametitle{Persistence modules}
+\begin{definition}
+A \emph{persistence module} $\mathbb{V}$ over a poset $P$ is a collection of vector spaces $\{V_i\}_{i \in P}$ and linear maps $\{v_s^t : V_s \to V_t\}_{s \leq t}$ such that
+\begin{align*}
+v_r^t = v_s^t \circ v_r^s \text{ for all } r \leq s \leq t
+\end{align*}
+\end{definition}
+Here we are interested in persistence modules over the real numbers $\mathbb{R}$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Sublevel persistence modules}
+Let $f : X \to \mathbb{R}$ be a function and define $X_a = f^{-1}((-\infty, a])$.
+\\~\\
+This gives us a filtration $\{X_a\}_{a \in \mathbb{R}}$, and therefore a persistence module $\mathbb{V}$ with
+\begin{align*}
+V_t &= H(X_t)\\
+v_s^t &= \eta_s^t
+\end{align*}
+
+The spaces we created above can be defined this way. Let $X = \mathbb{R}^n$, and $f(x) = \text{distance from $x$ to closest point in $K$}$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Persistence modules can be wild!}
+\begin{example}[Crawley-Boevey, 2012]
+Consider the persistence module:
+\begin{align*}
+\mathbb{V} = \prod_{n=1}^\infty \mathbb{I}[0, \tfrac{1}{n}]
+\end{align*}
+$\mathbb{V}$ does not admit an interval decomposition.
+\end{example}
+
+We can still define a barcode when the module is `q-tame', this is true in most settings.
+\end{frame}
+
+\section{Stability}
+\begin{frame}
+\frametitle{Stability}
+We want a small change in data to cause a small change in barcode.\\~\\
+\pause
+LHS: distance between two functions $f, g : X \to \mathbb{R}$\\~\\
+\pause
+RHS: distance between two barcodes $\mathcal{B}_1, \mathcal{B}_2 \subset \mathcal{H}$
+\end{frame}
+
+\begin{frame}
+\includegraphics[width=\textwidth,height=0.8\textheight,keepaspectratio]{bottleneck.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Bottleneck distance}
+\begin{definition}
+The bottleneck distance $d_b(\mathcal{A}, \mathcal{B})$ is the smallest $\delta \in \mathbb{R}$ such that there exists a partial matching $\mathcal{A} \longleftrightarrow \mathcal{B}$ where
+\begin{itemize}
+\item if $a \in \mathcal{A}$ and $b \in \mathcal{B}$ are matched, then $d^\infty(a, b) \leq \delta$;
+\item if $a \in \mathcal{A}$ is unmatched, then $d^\infty(a, \Delta) \leq \delta$; and,
+\item if $b \in \mathcal{B}$ is unmatched, then $d^\infty(b, \Delta) \leq \delta$; and,
+\end{itemize}
+\end{definition}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{The stability theorem -- Chazal et al. (2009)}
+
+\begin{theorem}
+Let $f, g : X \to \mathbb{R}$ be functions on a topological space $X$ and let $\mathbb{U} = H(X^f), \mathbb{V} = H(X^g)$ be the sublevel persistence modules.
+
+If $\mathbb{U}$ and $\mathbb{V}$ are q-tame, then:
+\begin{align*}
+d_b(\mathsf{dgm}(\mathbb{U}), \mathsf{dgm}(\mathbb{V})) \leq \Vert f - g \Vert_\infty
+\end{align*}
+\end{theorem}
+\end{frame}
+
+\begin{frame}
+\nocite{*}
+\printbibliography
+\end{frame}
+\end{document}

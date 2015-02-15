@@ -1,0 +1,315 @@
+\newcommand{\Pers}{\mathbf{Pers}}
+\renewcommand{\Ob}{\mathbf{Ob}}
+\newcommand{\Eph}{\mathbf{Eph}}
+
+\section{The Observable Category}
+\label{section-observable}
+
+We have seen throughout the previous sections of this work that persistence modules over $\R$ are quite badly behaved. Not every persistence module decomposes into interval modules. We restrict our attention to q-tame persistence modules, but even those do not always decompose into interval modules.
+
+We then defined the persistence diagram as an invariant for q-tame persistence modules, but it is not a complete invariant: two non-isomorphic q-tame persistence modules can have the same persistence diagram.
+
+In a recent paper, Chazal et al. \cite{chazal2014observable} show that these deficiencies vanish completely if we make a small adjustment to the category we are working in. Philosophically, the important data carried by persistence modules is how information persists over intervals, so features that exist over short intervals are seen as unimportant. Taken to the extreme we have what we refer to as \emph{ephemeral features}; features that exist only over a single point.
+
+In this section we will construct the \emph{observable category} of persistence modules $\Ob$, where such ephemeral information is ignored by design. We then show that this category has all the properties we could want: every q-tame module decomposes into a sum of interval modules and the persistence diagram is a complete invariant.
+
+We again restrict our attention to persistence modules over $\R$. To simplify the notation, we will write $\Pers$ to mean $\mathbf{Pers}_\R$.
+
+\subsection{Construction}
+
+First, a more formal definition of the persistence modules we are eliminating.
+
+\begin{definition}
+An \emph{ephemeral module} is one where the structure maps $v_s^t$ are 0 for all $s < t$.
+\end{definition}
+
+The collection of all ephemeral modules and morphisms forms a category $\mathbf{Eph}$, which is a full subcategory of $\Pers$. We now define a weaker notion of isomorphism, where two modules are considered equivalent if they only differ by ephemeral modules.
+
+\begin{definition}
+A \emph{weak isomorphism} is a module homomorphism $\Phi$ such that both $\ker \Phi$ and $\coker \Phi$ are ephemeral modules. Recall that, for persistence modules, kernels and cokernels are done pointwise.
+\end{definition}
+
+For example, consider the module map $\Phi : \I[p, q] \to \I[p, q)$, given by $\phi_t = 1$ where both domain and codomain are $\k$. Then $\Phi$ is a weak isomorphism as $\ker \Phi = \I[q,q] $ and $\coker \Phi = 0$, both ephemeral.
+
+We now wish to construct the `quotient category' $\Pers / \Eph$, which we refer to as the \emph{observable category} $\mathbf{Ob}$. By quotient category, we mean that we have a quotient functor $\pi : \Pers \to \Ob$ satisfying the following universal property: $\pi$ sends all weak isomorphisms of $\Pers$ to actual isomorphisms in $\Ob$, and any other functor $
+F : \Pers \to \mathcal{C}$ that also sends weak isomorphisms to isomorphisms factors uniquely through $\pi$.
+
+In problems of this sort there is often no explicit construction of the quotient category. In this case, however the objects and morphisms of $\Ob$ are easy to describe. We will give the construction of $\Ob$ first and then verify that it satisfies the universal property.
+
+Ordinary module morphisms in $\Pers$ are collections of linear maps $\phi_t : U_t \to V_t$. In what follows, it will be more useful to think of them as maps $\phi_s^t : U_s \to V_t$, such that $\phi_s^t = v_q^t \phi_p^q u_s^p$ whenever $s \leq p \leq q \leq t$. We can convert readily between the two representations by setting $\phi_t = \phi_t^t$ in one direction, and $\phi_s^t = \phi_t u_s^t = v_s^t \phi_s$ in the other. With this in mind:
+
+\begin{definition}
+An \emph{observable morphism} or \emph{ob-morphism}, $\Phi^\circ : \U \dashrightarrow \V$, is a collection of linear maps $\phi_s^t : U_s \to V_t$ for all $s < t$, such that $\phi_s^t = v_q^t \phi_p^q u_s^p$ whenever $s \leq p < q \leq t$. Note that, in contrast with ordinary morphisms, $s$ must be strictly less than $t$.
+
+If $\Phi^\circ : \U \dashrightarrow \V$ and $\Psi^\circ : \V \dashrightarrow \W$ are ob-morphisms, the composition $\Psi^\circ \Phi^\circ$ is given by $(\Psi^\circ \Phi^\circ)_s^t = \psi_u^t \phi_s^u$ for any $s < u < t$. The condition above guarantees that this is well defined.
+\end{definition}
+
+\begin{definition}
+The \emph{observable category} $\Ob$ is the collection of persistence modules together with ob-morphisms. The quotient functor $\pi : \Pers \to \Ob$ maps every object to itself, and every morphism $\Phi = \{ \phi_s^t \st s \leq t \}$ to $\pi(\Phi) = \Phi^\circ = \{ \phi_s^t \st s < t \}$ by forgetting each $\phi_t^t$.
+\end{definition}
+
+In the remainder of this section we show that $\Ob$ satisfies the universal property. Theorem \ref{thm-weak-to-iso} shows that $\pi$ sends weak isomorphisms to isomorphisms, and Theorem \ref{thm-universal-property} shows that other functors of this sort must factor uniquely through $\pi$.
+
+\begin{theorem}
+\label{thm-weak-to-iso}
+If $\Phi : \V \to \W$ is a weak isomorphism then $\Phi^\circ = \pi(\Phi)$ is invertible in $\Ob$ and is therefore an isomorphism.
+\end{theorem}
+\begin{proof}
+We construct an inverse $\Psi^\circ = \{\psi_s^t\}$ as follows. For a given $s < t$, choose an intermediate $s < u < t$. 
+
+Because $\coker \Phi$ is ephemeral, the composition of $w_s^u : W_s \to W_u$ with the natural map $W_u \to \coker \phi_u$ is zero. Otherwise, we would have some subspace of $h \subset V_s$ such that $w_s^u \phi_s(h) = \phi_u v_s^u(h) \subset \coker \phi_u$, which is a contradiction. Therefore, $w_s^u$ factors as a map $\omega_s^u : W_s \to \im \phi_u$ followed by the inclusion of $\im \phi_u$ into $W_u$.
+
+Also, $\ker \Phi$ is ephemeral, so the composition of the inclusion $\ker \phi_u \to V_u$ and $v_u^t : V_u \to V_t$ is zero. We now get an induced map $\tau_u^t : \im \phi_u \to V_t$, so that the composition of this map with the natural map $V_u \to \im \phi_u$ is $v_u^t$.
+
+We now define our inverse map to be $\psi_s^t = \tau_u^t \omega_s^u$. This gives a valid inverse for $\phi$, as each map only `forgets' information in the kernel or cokernel, both of which are ephemeral.
+\end{proof}
+
+Given an arbitrary persistence module $\V$, we now construct a `simpler' persistence module $\overline\V$ that captures the non-ephemeral information in $\V$.
+
+\begin{definition}
+Let $\V$ be a persistence module. We define $\overline\V$ to be the persistence module with spaces
+\begin{align*}
+\overline V_t = \colim \: \{V_s \st s < t\}
+\end{align*}
+and structure maps given by the universal property of colimits. These colimits exist as $\mathbf{Vect}_\mathbf{k}$ is cocomplete.
+\end{definition}
+
+This definition is a little opaque, so we unpack it as follows. The collection $\{V_s \st s < t\}$ forms a diagram indexed by all real numbers less than $t$ which we informally represent as follows:
+\begin{displaymath}
+\xymatrix{
+\dots \ar[r] & V_{s_1} \ar[r] & \dots \ar[r] & V_{s_2} \ar[r] & \dots < V_t
+}
+\end{displaymath}
+$\overline V_t$ is then the colimit of this diagram, i.e. the vector space and maps so that
+\begin{displaymath}
+\xymatrix{
+\dots \ar[r] & V_{s_1} \ar[r] \ar@{-}[drrr] & \dots \ar[r] \ar@{-}[drr] & V_{s_2} \ar[r] \ar@{-}[dr] & \dots \ar@{-}[d] & < V_t \\
+& & & & \overline V_t
+}
+\end{displaymath}
+is the initial such vector space that makes the diagram commute. If we choose some $u$ with $t < u$, then there is a collection of maps $\{V_{t_i} \to \overline V_u \st t_i < u \}$. In particular, this includes maps from $\{V_{s_i} \to \overline V_u \st s_i < t \}$! Our diagram looks like the following:
+\begin{displaymath}
+\xymatrix{
+% DRR DRR
+\dots \ar[r] & V_{s_1} \ar[r] \ar@{-}[drrr] \ar@{-}[drrrrrrr] & \dots \ar[r] \ar@{-}[drr] \ar@{-}[drrrrrr] & V_{s_2} \ar[r] \ar@{-}[dr] \ar@{-}[drrrrr] & \dots \ar[r] \ar@{-}[d] \ar@{-}[drrrr]  & V_{t_1} \ar[r] & \dots \ar[r]  & V_{t_2} \ar[r]  & \dots  \\
+& & & & \overline V_t \ar@{-->}[rrrr]_{\overline v_t^u} & & & & \overline V_u
+}
+\end{displaymath}
+By the universal property these maps $\{ V_{s_i} \to \overline V_u \}$ must factor uniquely through $\overline V_t$, and we define the structure map $\overline v_t^u$ to be this map.
+
+\begin{example}
+If $\V$ is any interval with endpoints $(p, q)$, then $\overline \V = \I(p, q]$. Looking at $\overline V_p$, this is the colimit of the diagram of maps $\{V_s \st s < p\}$, all of which are 0. The space $\overline V_q$ is the colimit of $\{V_s \st s < q\}$, which are constant $\mathbf{k}$ approaching $q$.
+\end{example}
+
+For any ob-morphism $\phi^\circ : \V \dashrightarrow \W$, we can generate maps $\overline V_t \to \overline W_t$ as suggested by the following diagram:
+\begin{displaymath}
+\xymatrix{
+\dots \ar[r] \ar[dr] & V_{s_1} \ar[r] \ar[dr] & \dots \ar[r] \ar[dr] & V_{s_2} \ar[r] \ar[dr] & \dots & < V_t \\
+\dots \ar[r] & W_{s_1} \ar[r] \ar@{-}[drrr] & \dots \ar[r] \ar@{-}[drr] & W_{s_2} \ar[r] \ar@{-}[dr] & \dots \ar@{-}[d]& < W_t \\
+& & & & \overline W_t
+}
+\end{displaymath}
+By the universal property, the vertical paths to $\overline W_t$ must factor uniquely through a map $\overline V_t \to \overline W_t$, which is the map we require. We can therefore think of `bar' as a functor $\Ob \to \Pers$.
+
+The universal property also generates, for each $t$, a map $\overline V_t \to V_t$. It is straightforward but tedious to verify that this is a module homomorphism $n^\V : \overline \V \to \V$.
+
+\begin{proposition}
+Given any persistence module $\V$, the morphism $n^\V : \overline \V \to \V$ is a weak isomorphism.
+\end{proposition}
+\begin{proof}
+As $n^\V$ is a module morphism, for any $s < t$ we have a commutative diagram
+\begin{displaymath}
+\xymatrix{
+\overline V_s \ar[d]_{n^\V_s} \ar[r]^{\overline v_s^t} & \overline V_t \ar[d]^{n^\V_t}\\
+V_s \ar[r]_{v_s^t} \ar[ur] & V_t
+}
+\end{displaymath}
+where the diagonal map is given by the universal property of $\overline V_t$. The bottom triangle commutes by the definition of $n^\V$ and the top triangle commutes by the definition of $\overline v_s^t$.
+
+Therefore, the map $\overline v_s^t$ sends $\ker(n^\V_t)$ to zero, which means $\ker(n^\V)$ is ephemeral. Similarly, $v_s^t$ sends $V_s$ to $\im(n^\V_t)$, so therefore to zero in $\coker(n^\V_t)$, and $\coker(n^\V)$ is ephemeral.
+\end{proof}
+
+With the groundwork in place, we can now prove the universal property of $\pi$.
+
+\begin{theorem}
+\label{thm-universal-property}
+Let $F : \Pers \to \C$ be a functor that takes weak isomorphisms to actual isomorphisms. Then there is a unique functor $G : \Ob \to \C$ such that $F = G \pi$.
+\end{theorem}
+\begin{proof}
+Because $\Ob$ has the same objects as $\Pers$, the functor $G$ is uniquely determined on objects. We now consider morphisms.
+
+First consider the diagram:
+\begin{displaymath}
+\xymatrix{
+\overline \V \ar[r]^{\overline \Phi} \ar[d]_{n^\V} & \overline \W  \ar[d]^{n^\W}\\
+\V \ar[r]_{\Phi} & \W
+}
+\end{displaymath}
+We wish to show that this diagram commutes. This is equivalent to showing that the diagram of vector spaces
+\begin{displaymath}
+\xymatrix{
+\overline V_t \ar[r]^{\overline \phi_t} \ar[d]_{n^\V_t} & \overline W_t  \ar[d]^{n^\W_t}\\
+V_t \ar[r]_{\phi_t} & W_t
+}
+\end{displaymath}
+commutes for all $t$. Consider any space $V_s$ with $s < t$. As $\Phi$ is a module map, we have that the following compositions of maps are equal:
+\begin{align*}
+V_s \xrightarrow{\phi_s} W_s \xrightarrow{w_s^t} W_t = V_s \xrightarrow{v_s^t} V_t \xrightarrow{\phi_t} W_t
+\end{align*}
+Now by the universal property of colimits, the maps $v_s^t$ and $w_s^t$ factor through $\overline V_t$ and $\overline W_t$ respectively:
+\begin{align*}
+V_s \xrightarrow{\phi_s} W_s \to \overline W_t \xrightarrow{n^\W_t} W_t = V_s \to \overline V_t \xrightarrow{n^\V_t} V_t \xrightarrow{\phi_t} W_t
+\end{align*}
+Now, by the definition of $\overline \Phi$, we can rewrite the left hand side to:
+\begin{align*}
+V_s \to \overline V_t \xrightarrow{\overline \phi_t} \overline W_t \xrightarrow{n^\W_t} W_t = V_s \to \overline V_t \xrightarrow{n^\V_t} V_t \xrightarrow{\phi_t} W_t
+\end{align*}
+This holds for \emph{every} $s < t$, so by the uniqueness of the map $\overline V_t \to W_t$, we must have that $n^\W_t \overline \phi_t = \phi_t n^\V_t$ as required.
+
+Now consider an ob-morphism $\Phi^\circ : \V \dashrightarrow \W$. We have a commutative diagram in $\Ob$:
+\begin{displaymath}
+\xymatrix{
+\overline \V \ar@{-->}[r]^{\pi(\overline \Phi)} \ar@{-->}[d]_{\pi(n^\V)} & \overline \W  \ar@{-->}[d]^{\pi(n^\W)}\\
+\V \ar@{-->}[r]_{\Phi^\circ} & \W
+}
+\end{displaymath}
+Recall that both $n^\V$ and $n^\W$ are weak isomorphisms, so $\pi(n^\V)$ and $\pi(n^\W)$ are both isomorphisms. If there is a functor $G$ with $F = G \pi$, applying $G$ to the diagram above forces us to define
+\begin{align*}
+G(\Phi^\circ) = F(n^\W)F(\overline \Phi)F(n^\V)^{-1}
+\end{align*}
+for every ob-morphism $\Phi^\circ$. This is a valid functor, as if $\Psi^\circ : \W \dashrightarrow \U$ then:
+\begin{align*}
+G(\Psi^\circ \Phi^\circ) &= F(n^\U)F(\overline{\Psi^\circ \Phi^\circ})F(n^\V)^{-1} \\
+&= F(n^\U)F(\overline{\Psi^\circ} \; \overline{\Phi^\circ})F(n^\V)^{-1} \\
+&= F(n^\U)F(\overline{\Psi^\circ})F(\overline{\Phi^\circ})F(n^\V)^{-1} \\
+&= F(n^\U)F(\overline{\Psi^\circ})F(n^\W)^{-1} F(n^\W) F(\overline{\Phi^\circ})F(n^\V)^{-1} \\
+&= G(\Psi^\circ) G(\Phi^\circ).
+\end{align*}
+
+Now suppose $\Phi^\circ = \pi(\Phi)$. Returning to the first diagram we considered, we have that:
+\begin{displaymath}
+\xymatrix{
+\overline \V \ar[r]^{\overline \Phi} \ar[d]_{n^\V} & \overline \W  \ar[d]^{n^\W}\\
+\V \ar[r]_{\Phi} & \W
+}
+\end{displaymath}
+commutes. Applying $F$,
+\begin{align*}
+F(\Phi)F(n^\V) &= F(n^\W)F(\overline \Phi),
+\intertext{or in other words,}
+F(\Phi) &= F(n^\W)F(\overline \Phi)F(n^\V)^{-1}\\
+ &= G(\Phi^\circ) = G(\pi(\Phi)).
+\end{align*}
+Therefore $F = G\pi$ on morphisms and $\pi$ satisfies the universal property.
+\end{proof}
+
+The above construction is an example of \emph{localisation}. There is a well developed theory for quotient categories $\C/\mathcal{A}$ when the category $\C$ is an \emph{abelian category}, and $\mathcal{A}$ is a full subcategory satisfying some technical conditions. Here we give a quick overview of the concepts involved.
+
+An abelian category is one that shares many useful properties with $\mathbf{Ab}$, the category of abelian groups. In particular, in an abelian category every morphism has a kernel and cokernel, and each pair of objects has a product and coproduct. If $\C$ is a small category and $\D$ is an abelian category, any functor category $[\C, \D]$ is also abelian, with the relevant operations all performed pointwise.
+
+Because $\mathbf{Vect}_\k$ is abelian, $\Pers = [\R, \mathbf{Vect}_\k]$ is also abelian. This retroactively justifies the algebraic manipulations involving kernels and cokernels that have appeared throughout previous sections of this work.
+
+The theory of localisation shows that when these conditions are satisfied, not only does the quotient $\C/\mathcal{A}$ always exist, but it is also itself an abelian category. Therefore, we do not lose any algebraic power when working in $\Ob$.
+
+A full treatment of localisation can be found in Popescu \cite{popescu1973abelian}.
+
+\subsection{Structure and stability in $\Ob$}
+
+We begin by quoting some decomposition results for persistence modules over $\R$, as given by Crawley-Boevey \cite{chazal2014observable,crawley2012decomposition}. 
+
+\begin{definition}
+A sequence \emph{stabilises} if beyond some point the terms in the sequence are all equal. Let $\V$ be a persistence module over $\R$.
+\begin{enumerate}[i)]
+\item $\V$ has the \emph{descending chain condition on images} if for all $t \geq s_1 > s_2 > \dots$, the chain
+\begin{align*}
+V_t \supseteq \im(v_{s_1}^t) \supseteq \im(v_{s_2}^t) \supseteq \dots
+\end{align*}
+stabilises.
+\item Given $s \leq t$, the space $V_s$ has the \emph{descending chain condition on $t$-bounded kernels} if for all $t < \dots < r_2 < r_1$ the chain
+\begin{align*}
+V_s \supseteq \ker(v_s^{r_1}) \supseteq \ker(v_s^{r_2}) \supseteq \dots
+\end{align*}
+stabilises.
+\item $\V$ has the \emph{descending chain condition on sufficient bounded kernels} if for all $t$ and nonzero $v \in V_t$, there exists $s \leq t$ such that $v \in \im(v_s^t)$ and $V_s$ has the descending chain condition on $t$-bounded kernels.
+\end{enumerate}
+\end{definition}
+
+Note that any q-tame persistence module must have the descending chain condition on images. For all $s < t$, $\rank v_s^t$ is always finite, so $\im(v_s^t)$ must be finite dimensional. The well ordering principle implies that the chain must then stabilise. For a similar reason, in a q-tame persistence module, $V_s$ has the descending chain condition on $t$-bounded kernels for every $s < t$.
+
+However, q-tame persistence modules need not satisfy the descending chain condition on sufficient bounded kernels. Consider the module 
+\begin{align*}
+\V = \bigoplus_{n=1}^\infty \I[0, \tfrac{1}{n}]
+\end{align*}
+seen earlier. Because the spaces with $t < 0$ are all $0$, any nonzero $v \in V_0$ is not in the image of any $v_s^0$ with $s < 0$. In the definition we are therefore forced to take $s = 0$. But $V_0$ does not satisfy the descending chain condition on $0$-bounded kernels. To see this, take $r_n = \tfrac{1}{n}$, then:
+\begin{align*}
+V_0 \supseteq \ker(v_0^1) \supseteq \ker(v_0^{\frac{1}{2}}) \supseteq \ker(v_0^{\frac{1}{3}}) \supseteq \dots
+\end{align*}
+does not stabilise.
+
+When the conditions do hold, we can use the following theorem.
+
+\begin{theorem}[Crawley-Boevey \cite{crawley2012decomposition}]
+Any persistence module with the descending chain condition on images and on sufficient bounded kernels is a direct sum of interval modules.
+\end{theorem}
+
+The strategy now is to show that every q-tame persistence module is weakly isomorphic to one that satisfies the above conditions. When we pass through to $\Ob$, this becomes a true isomorphism.
+
+\begin{definition}
+The \emph{radical} of a persistence module $\V$ is the submodule $\rad \V$ defined by:
+\begin{align*}
+(\rad \V)_t = \sum_{s < t} \im(v_s^t).
+\end{align*}
+\end{definition}
+
+By construction, $\rad \V$ satisfies the descending chain condition on sufficient bounded kernels, as we have eliminated the $v \in V_t$ such that $v \notin \im(v_s^t)$ for any $s < t$. Therefore $\rad \V$ satisfies the conditions of the above theorem and decomposes as a direct sum of interval modules.
+
+\begin{proposition}
+The natural inclusion $I = (i_t) : \rad \V \to \V$ is a weak isomoprhism.
+\end{proposition}
+\begin{proof}
+Firstly, $\ker I = 0$ as $I$ is an inclusion, so $\ker I$ is ephemeral. Let $v \notin \im(v_s^t)$ for any $s < t$, so that $v + \im(i_t) \in \coker(i_t)$. For any $u > t$, $v_t^u(v) \in \im(i_t)$ so $v$ is mapped to $0$ in $\coker(i_u)$. We conclude that $\coker I$ is also ephemeral. 
+\end{proof}
+
+Therefore, when we pass to $\Ob$ we have the following structure theorem. 
+
+\begin{theorem}
+Any q-tame persistence module is isomorphic in $\Ob$ to a direct sum of interval modules.
+\end{theorem}
+
+We can transplant the stability result of early sections into $\Ob$, in view of the following propositions.
+
+\begin{proposition}
+The interleaving distance between $\U$ and $\V$ is invariant under ob-isomorphisms.
+\end{proposition}
+\begin{proof}
+Suppose $\U$ and $\U'$ are ob-isomorphic. Then $d_i(\U, \U') = 0$, as we can take the ob-isomorphism maps $\{\phi_t^{t+\varepsilon}\}$ as an interleaving for all $\varepsilon > 0$. From the triangle inequality it follows that $d_i(\U, \V) = d_i(\U', \V)$.
+\end{proof}
+
+\begin{proposition}
+The undecorated persistence diagram is invariant under ob-isomorphisms.
+\end{proposition}
+\begin{proof}
+Let $\Phi : \V \dashrightarrow \W$ be an ob-isomorphism with inverse $\Psi : \W \dashrightarrow \V$. Recall that the undecorated diagram is given by the multiplicity function
+\begin{align*}
+m(p, q) = \min \{ \mu(R) \st R \in \Rect(\mathcal{D}), \, (p, q) \in R \}.
+\end{align*}
+We show that $m_\V(p, q) = m_\W(p, q)$ for all $(p, q)$. Let $R = [a, b] \times [c, d]$ be the rectangle that attains the minimum in the definition of $m_\V(p, q)$ and select a rectangle $R' = [a', b'] \times [c', d']$ lying inside $R$ so $(p, q) \in R' \subset R$. Following the same argument as the box lemma, we have:
+\begin{align*}
+\mu_\V(R) &= \langle \Qoff{A} \qem \qno \qem \qno \qem \Qon{B} \qem \Qon{C} \qem \qno \qem \qno \qem \Qoff{D} \st \V \rangle \\
+&\geq \langle \Qoff{A} \qem \qoff{a} \qem \qon{b} \qem \Qon{B} \qem \Qon{C} \qem \qon{c} \qem \qoff{d} \qem \Qoff{D} \st \W \rangle \\
+&= \langle \Qno \qem \qoff{a} \qem \qon{b} \qem \Qno \qem \Qno \qem \qon{c} \qem \qoff{d} \qem \Qno \st \U \rangle \\
+&= \mu_\U(R')
+\end{align*}
+and therefore $m_\W(p, q) \leq m_\V(p, q)$. The reverse inequality follows by symmetry, so the two multisets must be equal.
+\end{proof}
+
+Therefore, the stability theorem remains true in $\Ob$. 
+
+\begin{proposition}
+Let $\V$ and $\W$ be q-tame persistence modules. Then $\V$ and $\W$ are ob-isomorphic if and only if their undecorated persistence diagrams are equal.
+\end{proposition}
+\begin{proof}
+We saw the forwards direction above. For the reverse direction, we know that $\V$ and $\W$ are be ob-isomorphic to direct sums of interval modules. We can choose the intervals to be open and nonempty. These intervals are determined by the persistence diagrams of $\V$ and $\W$. These diagrams are equal, so the two direct sum decompositions are isomorphic. 
+\end{proof}
+
+The above proposition shows we have finally come full circle. Just as there is a bijection in standard persistent homology between persistence modules and barcodes, there is a bijection between isomorphism classes of q-tame persistence modules in $\Ob$ and locally finite persistence diagrams.
